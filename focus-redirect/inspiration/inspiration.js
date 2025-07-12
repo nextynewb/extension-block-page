@@ -92,21 +92,61 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentQuote = 0;
   let countdown = 30;
   let countdownInterval;
+  let quoteInterval;
 
-  // Display random quote on page load
+  // Enhanced quote transition with smooth animations
   function displayRandomQuote() {
     const randomIndex = Math.floor(Math.random() * quotes.length);
     const quote = quotes[randomIndex];
     
-    document.getElementById('quote').textContent = quote.text;
-    document.getElementById('author').textContent = `— ${quote.author}`;
-    
-    // Add fade-in animation
     const quoteContainer = document.querySelector('.quote-container');
+    const blockquote = document.getElementById('quote');
+    const cite = document.getElementById('author');
+    
+    // Fade out current quote
     quoteContainer.style.opacity = '0';
+    quoteContainer.style.transform = 'translateY(10px)';
+    
     setTimeout(() => {
-      quoteContainer.style.opacity = '1';
-    }, 100);
+      // Update content
+      blockquote.textContent = quote.text;
+      cite.textContent = `— ${quote.author}`;
+      
+      // Fade in new quote with stagger effect
+      setTimeout(() => {
+        quoteContainer.style.opacity = '1';
+        quoteContainer.style.transform = 'translateY(0)';
+        
+        // Animate individual elements
+        blockquote.style.opacity = '0';
+        cite.style.opacity = '0';
+        blockquote.style.transform = 'translateY(15px)';
+        cite.style.transform = 'translateY(15px)';
+        
+        setTimeout(() => {
+          blockquote.style.opacity = '1';
+          blockquote.style.transform = 'translateY(0)';
+        }, 100);
+        
+        setTimeout(() => {
+          cite.style.opacity = '1';
+          cite.style.transform = 'translateY(0)';
+        }, 300);
+        
+      }, 100);
+    }, 400);
+  }
+
+  // Initialize smooth transitions for quote elements
+  function initializeQuoteAnimations() {
+    const quoteContainer = document.querySelector('.quote-container');
+    const blockquote = document.getElementById('quote');
+    const cite = document.getElementById('author');
+    
+    // Add transition styles
+    quoteContainer.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    blockquote.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    cite.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
   }
 
   // Start countdown
@@ -115,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const continueBtn = document.getElementById('continueAnyway');
     const reasonContainer = document.getElementById('reason-container');
     
-    // Show reason container after 10 seconds
+    // Show reason container after 20 seconds
     setTimeout(() => {
       reasonContainer.classList.add('visible');
     }, 20000);
@@ -128,8 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(countdownInterval);
         continueBtn.disabled = false;
         continueBtn.textContent = 'Continue Anyway';
-        continueBtn.style.background = 'linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%)';
-        continueBtn.style.color = 'white';
+        continueBtn.style.background = 'linear-gradient(135deg, #1ee3cf 0%, #4af2e1 100%)';
+        continueBtn.style.color = '#0d1b2a';
       }
     }, 1000);
   }
@@ -141,6 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.style.transform = 'scale(0.95)';
     btn.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
     btn.textContent = 'Great Choice! 💪';
+    
+    // Stop quote transitions
+    if (quoteInterval) clearInterval(quoteInterval);
     
     setTimeout(() => {
       window.history.back();
@@ -161,32 +204,33 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = document.referrer || '/';
     } else {
       // Show validation message
-      reasonInput.style.borderColor = '#ff6b6b';
+      reasonInput.style.borderColor = '#1ee3cf';
       reasonInput.placeholder = 'Please enter your commitment first...';
       setTimeout(() => {
-        reasonInput.style.borderColor = '#3a3a3a';
+        reasonInput.style.borderColor = 'rgba(255, 255, 255, 0.1)';
         reasonInput.placeholder = 'I will work 2x harder on my goals after this...';
       }, 3000);
     }
   });
 
   // Initialize the page
+  initializeQuoteAnimations();
   displayRandomQuote();
   startCountdown();
   
-  // Change quote every 8 seconds
-  setInterval(displayRandomQuote, 8000);
+  // Change quote every 10 seconds with enhanced transitions
+  quoteInterval = setInterval(displayRandomQuote, 10000);
 });
 
 // Handle reason input focus
 document.getElementById('reason-input').addEventListener('focus', () => {
   const input = document.getElementById('reason-input');
-  input.style.borderColor = '#ff6b6b';
+  input.style.borderColor = '#1ee3cf';
 });
 
 document.getElementById('reason-input').addEventListener('blur', () => {
   const input = document.getElementById('reason-input');
   if (!input.value.trim()) {
-    input.style.borderColor = '#3a3a3a';
+    input.style.borderColor = 'rgba(255, 255, 255, 0.1)';
   }
 });
