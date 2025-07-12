@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Moment of Focus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="inspiration.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>My Reason to Push Forward</h1>
+      <div class="heart-divider">❤️</div>
+    </div>
+    
+    <div class="photo-momento">
+      <div class="photo-frame">
+        <img src="idris.gif" alt="My precious son" class="momento-photo">
+        <div class="photo-overlay">
+          <p class="photo-text">Every day I work harder for you</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="quote-section">
+      <div class="quote-container">
+        <blockquote id="quote"></blockquote>
+        <cite id="author"></cite>
+      </div>
+    </div>
+    
+    <div class="motivation-message">
+      <div class="personal-note">
+        <p class="main-motivation">"Every moment I choose focus over distraction, I'm building the future you deserve."</p>
+        <p class="sub-motivation">This is my fuel. This is my drive. This is my purpose.</p>
+      </div>
+    </div>
+    
+    <div class="powerful-reminder">
+      <p class="reminder-text">Are you making choices that your future self will thank you for?</p>
+      <p class="reminder-subtext">The discipline you show today shapes the life they'll inherit tomorrow.</p>
+    </div>
+    
+    <div class="actions">
+      <button id="goBack" class="btn primary-btn">Yes, I Choose to Work Harder</button>
+      <div class="continue-container">
+        <div id="reason-container">
+            <label for="reason-input" id="reason-label">If you must continue, commit to working harder later:</label>
+            <input type="text" id="reason-input" placeholder="I will work 2x harder on my goals after this...">
+        </div>
+        <button id="continueAnyway" class="btn secondary-btn" disabled>
+          Continue in <span id="countdown">30</span>s
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="inspiration.js"></script>
+</body>
+</html>
