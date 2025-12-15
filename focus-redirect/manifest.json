@@ -3,8 +3,29 @@
   "name": "Focus Redirect",
   "version": "1.0",
   "description": "Redirects distracting websites to an inspirational page",
-  "permissions": ["storage", "webRequest", "webNavigation", "tabs"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": [
+    "storage",
+    "webRequest",
+    "webNavigation",
+    "tabs",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content/timer.js"
+      ],
+      "css": [
+        "content/timer.css"
+      ]
+    }
+  ],
   "action": {
     "default_popup": "popup/popup.html",
     "default_icon": {
@@ -13,6 +34,9 @@
       "128": "icons/icon128.png"
     }
   },
+  "chrome_url_overrides": {
+    "newtab": "inspiration/inspiration.html"
+  },
   "background": {
     "service_worker": "background.js"
   },
@@ -20,5 +44,22 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "music/zikr.mp3",
+        "music/lofiquran.mp3",
+        "music/*.mp3",
+        "content/timer.css",
+        "inspiration/idris.gif",
+        "inspiration/idris1.png",
+        "inspiration/idris2.png",
+        "inspiration/*.png"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
 }

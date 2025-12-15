@@ -1,58 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Moment of Focus</title>
+  <title>Focus OS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="inspiration.css">
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>My Reason to Push Forward</h1>
-      <div class="heart-divider">❤️</div>
-    </div>
-    
-    <div class="photo-momento">
-      <div class="photo-frame">
-        <img src="idris.gif" alt="My precious son" class="momento-photo">
-        <div class="photo-overlay">
-          <p class="photo-text">Every day I work harder for you</p>
-        </div>
-      </div>
-    </div>
-    
-    <div class="quote-section">
-      <div class="quote-container">
-        <blockquote id="quote"></blockquote>
-        <cite id="author"></cite>
-      </div>
-    </div>
-    
 
-    
-    <div class="powerful-reminder">
-      <p class="reminder-text">Are you making choices that your future self will thank you for?</p>
-      <p class="reminder-subtext">The discipline you show today shapes the life they'll inherit tomorrow.</p>
-    </div>
-    
-    <div class="actions">
-      <button id="goBack" class="btn primary-btn">Yes, I Choose to Work Harder</button>
-      <div class="continue-container">
-        <div id="reason-container">
-            <label for="reason-input" id="reason-label">If you must continue, commit to working harder later:</label>
-            <input type="text" id="reason-input" placeholder="I will work 2x harder on my goals after this...">
+<body>
+
+  <div class="app-container">
+
+    <!-- SIDEBAR NAV (Visual only for now) -->
+    <nav class="sidebar">
+      <div class="brand-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #3b82f6;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </div>
+      <div class="nav-items">
+        <div class="nav-item active" title="Dashboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
         </div>
-        <button id="continueAnyway" class="btn secondary-btn" disabled>
-          Continue in <span id="countdown">30</span>s
-        </button>
+        <div class="nav-item" title="Music">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+        </div>
+        <div class="nav-item" title="Settings">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.82.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+            </path>
+          </svg>
+        </div>
+      </div>
+    </nav>
+
+    <!-- CONTENT GRID -->
+    <main class="dashboard-grid">
+
+      <!-- 1. HEADER section -->
+      <header class="top-header">
+        <div class="user-welcome">
+          <h1>Rahman Rom Personal Planner</h1>
+          <p>Let's make today count.</p>
+        </div>
+        <div class="header-controls">
+          <!-- Music Player Widget -->
+          <div class="music-widget-wrapper" style="position: relative;">
+            <div class="music-widget-pill" id="music-pill">
+              <span class="music-icon-anim">
+                <span></span><span></span><span></span>
+              </span>
+              <span class="current-track-name" id="track-name">Focus Track</span>
+              <button class="icon-btn" id="header-next-btn">↠</button>
+            </div>
+
+            <!-- Header dropdown -->
+            <div id="header-music-dropdown" class="header-music-dropdown">
+              <div class="header-track-item" data-index="0">🎵 lofi1.mp3</div>
+              <div class="header-track-item" data-index="1">🎵 lofi2.mp3</div>
+              <div class="header-track-item" data-index="2">🎵 zikr.mp3</div>
+              <div class="header-track-item" data-index="3">🎵 LoFi Quran.mp3</div>
+            </div>
+          </div>
+
+          <div class="date-badge" id="date-display">
+            Today
+          </div>
+        </div>
+      </header>
+
+      <!-- 2. HERO / MOTIVATION (Rotating) -->
+      <div class="bento-card hero-card" id="hero-bg">
+        <div class="hero-content">
+          <div class="chip">Motivation</div>
+          <h2 id="main-quote">"Focus is about saying no."</h2>
+          <div class="hero-footer">
+            <span id="main-author">— STEVE JOBS</span>
+            <div class="image-indicator">
+              <!-- Dots for image count if needed -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. STATS: Distractions -->
+      <div class="bento-card stat-card distraction-stat">
+        <div class="stat-icon">🛡️</div>
+        <div class="stat-value" id="distraction-count">0</div>
+        <div class="stat-label">Distractions Blocked</div>
+      </div>
+
+      <!-- 4. STATS: Focus Minutes -->
+      <div class="bento-card stat-card focus-stat">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-value" id="focus-minutes">0</div>
+        <div class="stat-label">Minutes Focused</div>
+
+        <!-- Progress Bar -->
+        <div class="focus-goal-wrapper">
+          <div class="focus-progress-track">
+            <div class="focus-progress-fill" id="focus-progress-bar" style="width: 0%"></div>
+          </div>
+          <div class="focus-goal-text"><span id="focus-goal-percent">0</span>% of 240m Goal</div>
+        </div>
+      </div>
+
+      <!-- 5. PRODUCTIVITY CHART -->
+      <div class="bento-card chart-card">
+        <h3>Weekly Focus</h3>
+        <div class="chart-container" id="weekly-chart">
+          <!-- Bars injected via JS -->
+        </div>
+      </div>
+
+      <!-- 6. STICKY NOTES (Replaces Matrix) -->
+      <div class="sticky-notes-wrapper">
+        <!-- Note 1: Blue -->
+        <div class="sticky-note note-blue" style="transform: rotate(-2deg);">
+          <div class="note-content" contenteditable="true" id="note-1"></div>
+        </div>
+        <!-- Note 2: Pink -->
+        <div class="sticky-note note-pink" style="transform: rotate(1deg); top: 10px;">
+          <div class="note-content" contenteditable="true" id="note-2"></div>
+        </div>
+        <!-- Note 3: Green -->
+        <div class="sticky-note note-green" style="transform: rotate(-1deg);">
+          <div class="note-content" contenteditable="true" id="note-3"></div>
+        </div>
+        <!-- Note 4: Yellow -->
+        <div class="sticky-note note-yellow" style="transform: rotate(2deg); top: 5px;">
+          <div class="note-content" contenteditable="true" id="note-4"></div>
+        </div>
+      </div>
+
+      <!-- 6. TO-DO LIST (Existing Logic) -->
+      <div class="bento-card todo-card">
+        <div class="card-header">
+          <h3>Tasks</h3>
+        </div>
+        <div class="todo-creation-area">
+          <div class="todo-input-wrapper">
+            <input type="text" id="todo-input" placeholder="I want to focus on..." autocomplete="off">
+            <div class="duration-picker">
+              <span id="current-duration">25m</span>
+              <div class="duration-options">
+                <button data-min="10">10m</button>
+                <button data-min="25" class="active">25m</button>
+                <button data-min="45">45m</button>
+                <button data-min="60">60m</button>
+              </div>
+            </div>
+            <button id="add-todo-btn" class="add-confirm-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <ul class="todo-list-modern" id="todo-list">
+        </ul>
+      </div>
+
+      <!-- 7. PRAYER SCHEDULE -->
+      <div class="bento-card prayer-card">
+        <div class="prayer-header">
+          <h3>Next Prayer</h3>
+          <div id="next-prayer-name" class="chip">Fajr</div>
+        </div>
+        <div class="prayer-countdown" id="prayer-countdown">--h --m</div>
+        <div class="prayer-progress-track">
+          <div class="prayer-progress-fill" id="prayer-progress-bar"></div>
+        </div>
+        <div class="prayer-list" id="prayer-list">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Blocked Warning Overlay (Hidden by default) -->
+  <div id="blocked-overlay" class="blocked-overlay">
+    <div class="blocked-modal" style="position: relative;">
+      <button id="close-overlay-btn"
+        style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
+      <div class="blocked-icon">⛔</div>
+      <h2>Access Restricted</h2>
+      <p>You are in Focus Mode.</p>
+      <div class="blocked-actions">
+        <button id="goBack" class="btn-primary">Go Back</button>
+        <button id="continueAnyway" class="btn-ghost" disabled>Continue (<span id="countdown">30</span>)</button>
+      </div>
+      <div id="reason-container" style="display:none; margin-top: 15px;">
+        <input type="text" id="reason-input" placeholder="Reason..." class="reason-input">
       </div>
     </div>
   </div>
-  
+
   <script src="inspiration.js"></script>
 </body>
+
 </html>
