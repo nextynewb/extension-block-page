@@ -127,39 +127,13 @@
         </div>
       </div>
 
-      <!-- 5. PRODUCTIVITY CHART -->
-      <div class="bento-card chart-card">
-        <h3>Weekly Focus</h3>
-        <div class="chart-container" id="weekly-chart">
-          <!-- Bars injected via JS -->
-        </div>
-      </div>
-
-      <!-- 6. STICKY NOTES (Replaces Matrix) -->
-      <div class="sticky-notes-wrapper">
-        <!-- Note 1: Blue -->
-        <div class="sticky-note note-blue" style="transform: rotate(-2deg);">
-          <div class="note-content" contenteditable="true" id="note-1"></div>
-        </div>
-        <!-- Note 2: Pink -->
-        <div class="sticky-note note-pink" style="transform: rotate(1deg); top: 10px;">
-          <div class="note-content" contenteditable="true" id="note-2"></div>
-        </div>
-        <!-- Note 3: Green -->
-        <div class="sticky-note note-green" style="transform: rotate(-1deg);">
-          <div class="note-content" contenteditable="true" id="note-3"></div>
-        </div>
-        <!-- Note 4: Yellow -->
-        <div class="sticky-note note-yellow" style="transform: rotate(2deg); top: 5px;">
-          <div class="note-content" contenteditable="true" id="note-4"></div>
-        </div>
-      </div>
-
-      <!-- 6. TO-DO LIST (Existing Logic) -->
-      <div class="bento-card todo-card">
+      <!-- 5. KANBAN BOARD (Replaces To-Do List) -->
+      <div class="bento-card kanban-card-wrapper">
         <div class="card-header">
           <h3>Tasks</h3>
         </div>
+
+        <!-- Creation Area (Copied from previous todo-card) -->
         <div class="todo-creation-area">
           <div class="todo-input-wrapper">
             <input type="text" id="todo-input" placeholder="I want to focus on..." autocomplete="off">
@@ -181,8 +155,51 @@
             </button>
           </div>
         </div>
-        <ul class="todo-list-modern" id="todo-list">
-        </ul>
+
+        <!-- Kanban Columns -->
+        <div class="kanban-board-container">
+          <!-- Column 1: To Do -->
+          <div class="kanban-column" id="col-todo" data-status="todo">
+            <div class="column-header">
+              <span class="col-title">To Do</span>
+              <span class="col-count" id="count-todo">0</span>
+            </div>
+            <div class="column-content" id="list-todo">
+              <!-- Items -->
+            </div>
+          </div>
+
+          <!-- Column 2: Doing -->
+          <div class="kanban-column" id="col-doing" data-status="doing">
+            <div class="column-header">
+              <span class="col-title" style="color:#60a5fa;">Doing</span>
+              <span class="col-count" id="count-doing">0</span>
+            </div>
+            <div class="column-content" id="list-doing">
+              <!-- Items -->
+            </div>
+          </div>
+
+          <!-- Column 3: Done -->
+          <div class="kanban-column" id="col-done" data-status="done">
+            <div class="column-header">
+              <span class="col-title" style="color:#10b981;">Done</span>
+              <span class="col-count" id="count-done">0</span>
+            </div>
+            <div class="column-content" id="list-done">
+              <!-- Items -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 6. CHART -->
+      <div class="bento-card chart-card">
+        <h3>Weekly Focus</h3>
+        <div class="chart-container" id="weekly-chart">
+          <!-- Bars injected via JS -->
+        </div>
       </div>
 
       <!-- 7. PRAYER SCHEDULE -->
@@ -197,6 +214,26 @@
         </div>
         <div class="prayer-list" id="prayer-list">
           <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- 8. STICKY NOTES -->
+      <div class="sticky-notes-wrapper">
+        <!-- Note 1: Blue -->
+        <div class="sticky-note note-blue" style="transform: rotate(-2deg);">
+          <div class="note-content" contenteditable="true" id="note-1"></div>
+        </div>
+        <!-- Note 2: Pink -->
+        <div class="sticky-note note-pink" style="transform: rotate(1deg); top: 10px;">
+          <div class="note-content" contenteditable="true" id="note-2"></div>
+        </div>
+        <!-- Note 3: Green -->
+        <div class="sticky-note note-green" style="transform: rotate(-1deg);">
+          <div class="note-content" contenteditable="true" id="note-3"></div>
+        </div>
+        <!-- Note 4: Yellow -->
+        <div class="sticky-note note-yellow" style="transform: rotate(2deg); top: 5px;">
+          <div class="note-content" contenteditable="true" id="note-4"></div>
         </div>
       </div>
 

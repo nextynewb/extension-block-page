@@ -41,20 +41,44 @@ function incrementRedirectCount(domain) {
   });
 }
 
-// --- FOCUS SESSION HANDLING ---
+// --- DEBUG & STATE HANDLING ---
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (msg.type === 'START_FOCUS') {
     startFocusSession(msg.task, msg.taskId, msg.duration);
   } else if (msg.type === 'STOP_FOCUS') {
-    stopFocusSession(); // Manual stop (Pause)
-  } else if (msg.type === 'NEXT_TRACK') {
-    handleNextTrack();
-  } else if (msg.type === 'SET_TRACK') {
-    handleSetTrack(msg.trackIndex);
+    stopFocusSession();
   } else if (msg.type === 'COMPLETE_TASK') {
-    completeActiveTask(); // Manual complete button
-  } else if (msg.type === 'TOGGLE_MUSIC') {
-    safeSendMessage({ type: 'TOGGLE_MUSIC' });
+    completeActiveTask();
+  } else if (msg.type === 'PLAYBACK_STATE') {
+    // Visual Debugging
+    if (msg.isPlaying) {
+      chrome.action.setBadgeText({ text: 'ON' });
+      chrome.action.setBadgeBackgroundColor({ color: '#22c55e' }); // Green
+    } else {
+      chrome.action.setBadgeText({ text: '' }); // Clear when paused
+    }
+  } else if (msg.type === 'AUDIO_ERROR') {
+    chrome.action.setBadgeText({ text: 'ERR' });
+    chrome.action.setBadgeBackgroundColor({ color: '#ef4444' }); // Red
+    console.error("Audio Error reported:", msg.error);
+  } else if (msg.type === 'MANUAL_PLAY_MUSIC') {
+    // Ensure offscreen document exists before trying to play
+    setupOffscreenDocument('offscreen/audio.html').then(() => {
+      safeSendMessage({ type: 'PLAY_MUSIC' });
+    }).catch(err => {
+      console.warn("Failed to setup during manual play:", err);
+      // Try playing anyway if it failed due to existing context
+      safeSendMessage({ type: 'PLAY_MUSIC' });
+    });
+  } else if (msg.type === 'REQUEST_INIT_STATE') {
+    chrome.storage.local.get('currentTrackIndex', (result) => {
+      safeSendMessage({
+        type: 'INIT_STATE',
+        trackIndex: result.currentTrackIndex || 0
+      });
+    });
+  } else if (msg.type === 'UPDATE_TRACK_INDEX') {
+    chrome.storage.local.set({ currentTrackIndex: msg.index });
   }
 });
 
@@ -62,6 +86,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'focusTimer') {
     checkTimerExpiry();
+  } else if (alarm.name === 'fridayCheck') {
+    checkFridayPrayer();
   }
 });
 
@@ -88,16 +114,17 @@ async function startFocusSession(task, taskId, durationMinutes = 25) {
   };
   chrome.storage.local.set({ focusSession: session });
 
-  // Create alarm to check every minute (or shorter if possible, but 1m is standard min)
-  // For higher precision, we rely on the alarm firing approximately when needed.
-  // Chrome Alarms min is 1 min. For seconds precision, we might need a backup
-  // logic or just accept 1m resolution for auto-stop in background.
-  // Actually, we can set 'when' to exact time.
+  // Create alarm to check every minute
   const expiryTime = Date.now() + (durationMinutes * 60 * 1000);
   chrome.alarms.create('focusTimer', { when: expiryTime });
 
-  await setupOffscreenDocument('offscreen/audio.html');
-  safeSendMessage({ type: 'PLAY_MUSIC' });
+  try {
+    await setupOffscreenDocument('offscreen/audio.html');
+  } catch (err) {
+    console.warn("Failed to setup offscreen document:", err);
+  }
+  // Audio is now decoupled from timer. User plays it manually.
+  // safeSendMessage({ type: 'PLAY_MUSIC' });
 }
 
 function stopFocusSession() {
@@ -111,7 +138,7 @@ function stopFocusSession() {
     }
     // Reset session state
     chrome.storage.local.set({ focusSession: { isActive: false } });
-    safeSendMessage({ type: 'STOP_MUSIC' });
+    // safeSendMessage({ type: 'STOP_MUSIC' });
   });
 }
 
@@ -125,15 +152,12 @@ function completeActiveTask() {
     }
     // Reset session
     chrome.storage.local.set({ focusSession: { isActive: false } });
-    safeSendMessage({ type: 'STOP_MUSIC' });
+    // safeSendMessage({ type: 'STOP_MUSIC' });
   });
 }
 
 function updateStatsAndTodo(session, focusStats, todos, isComplete) {
   const elapsedMs = Date.now() - session.startTime;
-  // If completing, we might want to credit the FULL duration even if slightly off? 
-  // User said: "just make it say that that is done... reflected to minute focus"
-  // Let's credit actual elapsed time.
   const elapsedSecs = Math.floor(elapsedMs / 1000);
   const elapsedMins = Math.floor(elapsedMs / 60000);
 
@@ -145,7 +169,7 @@ function updateStatsAndTodo(session, focusStats, todos, isComplete) {
         return {
           ...t,
           elapsed: newElapsed,
-          completed: isComplete ? true : t.completed // Mark done if complete
+          completed: isComplete ? true : t.completed
         };
       }
       return t;
@@ -166,23 +190,34 @@ function updateStatsAndTodo(session, focusStats, todos, isComplete) {
   }
 }
 
+// Helper functions (kept if needed by other logic, but not used by echoes anymore)
+function handleNextTrack() {
+  safeSendMessage({ type: 'NEXT_TRACK' });
+}
+
+function handleSetTrack(trackIndex) {
+  safeSendMessage({ type: 'SET_TRACK', trackIndex });
+}
+
 function safeSendMessage(message) {
   chrome.runtime.sendMessage(message).catch(err => {
     // Suppress "Receiving end does not exist" error
-    // This happens if the offscreen document or popup isn't currently listening
-    // which is expected behavior in many context switches.
   });
 }
 
-
 async function setupOffscreenDocument(path) {
-  // Check if offscreen doc already exists
-  const existingContexts = await chrome.runtime.getContexts({
-    contextTypes: ['OFFSCREEN_DOCUMENT'],
-    documentUrls: [chrome.runtime.getURL(path)]
-  });
-
-  if (existingContexts.length > 0) return;
+  // Robust check for existing offscreen document
+  if (chrome.runtime.getContexts) {
+    const existingContexts = await chrome.runtime.getContexts({
+      contextTypes: ['OFFSCREEN_DOCUMENT'],
+      documentUrls: [chrome.runtime.getURL(path)]
+    });
+    if (existingContexts.length > 0) return;
+  } else {
+    // Fallback: check via checking clients or just proceed to create (it will reject if exists)
+    // Note: older chrome versions might throw if we try to create duplicate.
+    // We'll let it proceed to creation and catch the error if it says "only one allowed".
+  }
 
   // Create it
   if (creatingOffscreenParams) {
@@ -193,7 +228,64 @@ async function setupOffscreenDocument(path) {
       reasons: ['AUDIO_PLAYBACK'],
       justification: 'Playing focus music in the background',
     });
-    await creatingOffscreenParams;
+
+    try {
+      await creatingOffscreenParams;
+    } catch (error) {
+      if (!error.message.startsWith('Only a single offscreen')) {
+        throw error;
+      }
+    }
     creatingOffscreenParams = null;
+  }
+}
+
+// --- FRIDAY PRAYER NOTIFICATION ---
+let prayerData = null;
+let lastFridayNotificationDate = null;
+
+function loadPrayerData() {
+  fetch('inspiration/prayers.json')
+    .then(res => res.json())
+    .then(data => { prayerData = data; })
+    .catch(err => console.error("Failed to load prayers", err));
+}
+loadPrayerData();
+
+// Check every minute
+chrome.alarms.create('fridayCheck', { periodInMinutes: 1 });
+
+function checkFridayPrayer() {
+  if (!prayerData) return;
+  const now = new Date();
+
+  // 5 = Friday
+  if (now.getDay() !== 5) return;
+
+  const todayKey = now.toLocaleDateString('en-CA');
+  const schedule = prayerData[todayKey];
+
+  // Use Dhuhr time for Friday checks
+  if (!schedule || !schedule.Dhuhr) return;
+
+  const [h, m] = schedule.Dhuhr.split(':').map(Number);
+  const dhuhrTime = new Date(now);
+  dhuhrTime.setHours(h, m, 0, 0);
+
+  const diff = dhuhrTime.getTime() - now.getTime();
+  const fiveMinutes = 5 * 60 * 1000;
+
+  // Notify if within 5 minutes (and haven't notified today)
+  if (diff > 0 && diff <= fiveMinutes) {
+    if (lastFridayNotificationDate !== todayKey) {
+      chrome.notifications.create({
+        type: 'basic',
+        iconUrl: 'icons/icon128.png',
+        title: 'Friday Prayer',
+        message: 'Friday Prayers are in 5 minutes. Please pray for me.',
+        priority: 2
+      });
+      lastFridayNotificationDate = todayKey;
+    }
   }
 }

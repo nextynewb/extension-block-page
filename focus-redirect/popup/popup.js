@@ -91,4 +91,84 @@ document.addEventListener('DOMContentLoaded', () => {
       sitesList.appendChild(siteElement);
     });
   }
+  // --- MUSIC PLAYER LOGIC ---
+  const toggleMusicBtn = document.getElementById('toggleMusic');
+  const prevTrackBtn = document.getElementById('prevTrack');
+  const nextTrackBtn = document.getElementById('nextTrack');
+  const playIcon = document.getElementById('playIcon');
+  const pauseIcon = document.getElementById('pauseIcon');
+  const currentTrackEl = document.getElementById('currentTrack');
+
+  let isPlaying = false;
+  // TODO: Fetch tracks list from background or audio.js to stay in sync
+  const tracks = ['LoFi 1', 'LoFi 2', 'Zikr', 'LoFi Quran'];
+  let currentTrackIndex = 0;
+
+  // Initialize music state
+  chrome.storage.local.get(['currentTrackIndex'], (result) => {
+    if (result.currentTrackIndex !== undefined) {
+      currentTrackIndex = result.currentTrackIndex;
+      updateTrackName();
+    }
+  });
+
+  // Check actual playback state from background
+  // Ideally, we ask background, but for now we settle for optimistic UI or a message ping
+  // Let's optimistic UI for now, or just default to paused until user interacts
+  // The audio.js sends PLAYBACK_STATE, let's listen for it
+  chrome.runtime.onMessage.addListener((msg) => {
+    if (msg.type === 'PLAYBACK_STATE') {
+      isPlaying = msg.isPlaying;
+      updatePlayIcon();
+    } else if (msg.type === 'TRACK_CHANGED') {
+      // Update track name if it comes from auto-next
+      const name = msg.trackName;
+      // Simple mapping or just display raw
+      currentTrackEl.textContent = name;
+    }
+  });
+
+  toggleMusicBtn.addEventListener('click', () => {
+    if (isPlaying) {
+      chrome.runtime.sendMessage({ type: 'STOP_MUSIC' });
+      isPlaying = false;
+    } else {
+      chrome.runtime.sendMessage({ type: 'MANUAL_PLAY_MUSIC' });
+      // We will receive PLAYBACK_STATE=true shortly if successful
+      // But let's optimistic update to feel responsive
+      isPlaying = true;
+    }
+    updatePlayIcon();
+  });
+
+  nextTrackBtn.addEventListener('click', () => {
+    chrome.runtime.sendMessage({ type: 'NEXT_TRACK' });
+    // We rely on TRACK_CHANGED message or storage update
+    currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+    updateTrackName();
+  });
+
+  prevTrackBtn.addEventListener('click', () => {
+    // Logic for prev track isn't in audio.js yet (only next), 
+    // so let's just do next for now or implement setTrack
+    // Let's implement pseudo-prev locally
+    currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+    chrome.runtime.sendMessage({ type: 'SET_TRACK', trackIndex: currentTrackIndex });
+    updateTrackName();
+  });
+
+  function updatePlayIcon() {
+    if (isPlaying) {
+      playIcon.classList.add('hidden');
+      pauseIcon.classList.remove('hidden');
+    } else {
+      playIcon.classList.remove('hidden');
+      pauseIcon.classList.add('hidden');
+    }
+  }
+
+  function updateTrackName() {
+    // Just a placeholder until we get real data
+    currentTrackEl.textContent = tracks[currentTrackIndex];
+  }
 });

@@ -3,7 +3,6 @@ const tracks = ['lofi1.mp3', 'lofi2.mp3', 'zikr.mp3', 'lofiquran.mp3'];
 let currentIndex = 0;
 let audio = document.getElementById('focusMusic');
 
-
 chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === 'PLAY_MUSIC') {
         playAudio();
@@ -16,43 +15,41 @@ chrome.runtime.onMessage.addListener((msg) => {
             playAudio();
         } else {
             audio.pause();
-            chrome.runtime.sendMessage({ type: 'PLAYBACK_STATE', isPlaying: false });
+            chrome.runtime.sendMessage({ type: 'PLAYBACK_STATE', isPlaying: false }).catch(() => { });
         }
     } else if (msg.type === 'SET_TRACK') {
         setTrack(msg.trackIndex);
+    } else if (msg.type === 'INIT_STATE') {
+        // Initialize state from background
+        if (msg.trackIndex !== undefined) {
+            currentIndex = msg.trackIndex;
+        }
     }
 });
 
-// Check state on load
-chrome.storage.local.get(['focusSession', 'currentTrackIndex'], (result) => {
-    if (result.currentTrackIndex !== undefined) {
-        currentIndex = result.currentTrackIndex;
-    }
+// Ask background for initial state
+chrome.runtime.sendMessage({ type: 'REQUEST_INIT_STATE' }).catch(() => { });
 
-    if (result.focusSession && result.focusSession.isActive) {
-        playAudio();
-    }
-});
 
 function playAudio() {
     if (!audio) return;
-    // Use absolute path to ensure no resolution errors
     const trackUrl = chrome.runtime.getURL(`music/${tracks[currentIndex]}`);
 
-    // Check if source matches (to avoid reloading if already set)
-    if (audio.src !== trackUrl) {
-        audio.src = trackUrl;
-        audio.load();
-    }
+    console.log("Loading track:", trackUrl);
 
+    audio.src = trackUrl;
+    audio.load();
+    audio.currentTime = 0;
     audio.volume = 1.0;
 
     const playPromise = audio.play();
     if (playPromise !== undefined) {
         playPromise.then(() => {
-            chrome.runtime.sendMessage({ type: 'PLAYBACK_STATE', isPlaying: true });
+            chrome.runtime.sendMessage({ type: 'PLAYBACK_STATE', isPlaying: true }).catch(() => { });
         }).catch(error => {
-            console.error(`Audio playback failed: ${error.name} - ${error.message}`);
+            const errMsg = `Playback failed: ${error.name} - ${error.message}`;
+            console.error(errMsg);
+            chrome.runtime.sendMessage({ type: 'AUDIO_ERROR', error: errMsg }).catch(() => { });
         });
     }
     notifyTrackChange();
@@ -61,46 +58,33 @@ function playAudio() {
 function stopAudio() {
     if (audio) {
         audio.pause();
-        chrome.runtime.sendMessage({ type: 'PLAYBACK_STATE', isPlaying: false });
+        chrome.runtime.sendMessage({ type: 'PLAYBACK_STATE', isPlaying: false }).catch(() => { });
     }
 }
 
 function nextTrack() {
     currentIndex = (currentIndex + 1) % tracks.length;
-    chrome.storage.local.set({ currentTrackIndex: currentIndex });
-    playAudio(); // This will handle loading the new track
+    // Notify background to save state
+    chrome.runtime.sendMessage({ type: 'UPDATE_TRACK_INDEX', index: currentIndex }).catch(() => { });
+    playAudio();
 }
 
 function setTrack(index) {
     if (typeof index === 'number' && index >= 0 && index < tracks.length) {
-        // If same track, just ensure playing
         if (currentIndex === index) {
             playAudio();
             return;
         }
 
         currentIndex = index;
-        chrome.storage.local.set({ currentTrackIndex: currentIndex });
+        chrome.runtime.sendMessage({ type: 'UPDATE_TRACK_INDEX', index: currentIndex }).catch(() => { });
 
-        // Force refresh
         stopAudio();
         const trackUrl = chrome.runtime.getURL(`music/${tracks[currentIndex]}`);
         audio.src = trackUrl;
         audio.load();
-
-        // Short timeout to ensure load starts? Usually not needed for local files but safe.
-        // Direct play
         playAudio();
     }
-}
-
-function loadTrack(index) {
-    // Deprecated in favor of doing it inside playAudio for tighter control
-    // But keeping structure if needed, or simply removing it.
-    // simpler:
-    const trackUrl = chrome.runtime.getURL(`music/${tracks[index]}`);
-    audio.src = trackUrl;
-    audio.load();
 }
 
 function notifyTrackChange() {
@@ -110,7 +94,6 @@ function notifyTrackChange() {
     }).catch(() => { });
 }
 
-// Auto play next when ended?
 audio.addEventListener('ended', () => {
     nextTrack();
 });

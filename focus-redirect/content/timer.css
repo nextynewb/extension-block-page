@@ -1,97 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+
 #antigravity-focus-timer {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 2147483647;
-    /* Max Z-Index */
+    bottom: 24px;
+    right: 24px;
+    width: 320px;
     background: rgba(15, 23, 42, 0.95);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    border-radius: 12px;
-    padding: 12px 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    color: #fff;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    backdrop-filter: blur(8px);
-    width: 220px;
-    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    transition: opacity 0.3s;
-}
-
-#antigravity-focus-timer:hover {
-    border-color: rgba(59, 130, 246, 0.6);
-}
-
-.timer-content {
-    flex: 1;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    z-index: 2147483647;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    color: white;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    gap: 12px;
+    transition: all 0.3s ease;
+    animation: agSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Reset some common inheriting properties */
+    text-align: left;
+    line-height: normal;
+    box-sizing: border-box;
 }
 
-.timer-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+#antigravity-focus-timer * {
+    box-sizing: border-box;
+}
+
+@keyframes agSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.ag-timer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ag-timer-info {
+    flex: 1;
+    min-width: 0;
+    /* Text truncation */
+}
+
+.ag-task-text {
+    font-size: 0.85rem;
     color: #94a3b8;
-    font-weight: 600;
     margin-bottom: 2px;
-}
-
-.timer-task {
-    font-size: 13px;
-    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #f8fafc;
-    margin-bottom: 2px;
 }
 
-.timer-time {
-    font-size: 18px;
-    font-family: monospace;
+.ag-time-text {
+    font-size: 1.75rem;
     font-weight: 700;
-    color: #38bdf8;
-    text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: white;
 }
 
-.timer-stop {
-    background: transparent;
+.ag-timer-actions {
+    display: flex;
+    gap: 8px;
+    margin-left: 12px;
+}
+
+.ag-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     border: none;
-    color: #64748b;
     cursor: pointer;
-    font-size: 20px;
-    padding: 4px;
-    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s;
+    padding: 0;
+    margin: 0;
 }
 
-.timer-stop:hover {
-    background: rgba(255, 255, 255, 0.1);
+.ag-btn-music {
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+}
+
+.ag-btn-music:hover,
+.ag-btn-music.active {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+.ag-btn-done {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.ag-btn-done:hover {
+    background: rgba(16, 185, 129, 0.25);
+    transform: scale(1.05);
+}
+
+.ag-btn-stop {
+    background: rgba(239, 68, 68, 0.15);
     color: #ef4444;
 }
 
-.timer-drag-handle {
-    color: #475569;
-    cursor: grab;
-    display: flex;
-    align-items: center;
+.ag-btn-stop:hover {
+    background: rgba(239, 68, 68, 0.25);
+    transform: scale(1.05);
 }
 
-@keyframes slideIn {
+.ag-music-dropdown {
+    display: none;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ag-music-dropdown.visible {
+    display: block;
+    animation: agFadeIn 0.2s ease;
+}
+
+@keyframes agFadeIn {
     from {
-        transform: translateY(20px);
         opacity: 0;
+        transform: translateY(-5px);
     }
 
     to {
-        transform: translateY(0);
         opacity: 1;
+        transform: translateY(0);
     }
+}
+
+.ag-track-item {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ag-track-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
 }

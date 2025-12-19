@@ -175,7 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.local.set({ todos });
     // When saving, we need to re-render with the current session info
     chrome.storage.local.get('focusSession', (result) => {
-      renderTodos(todos, result.focusSession);
+      const session = result.focusSession;
+      renderTodos(todos, session);
+      renderKanban(todos, session);
     });
   }
 
@@ -614,7 +616,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function loadTodosInternal() {
     chrome.storage.local.get(['todos', 'focusSession'], (result) => {
-      renderTodos(result.todos || [], result.focusSession);
+      const todos = result.todos || [];
+      const session = result.focusSession;
+      renderTodos(todos, session);
+      renderKanban(todos, session);
     });
   }
 
@@ -762,5 +767,227 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   setInterval(updateClock, 1000);
   updateClock();
+
+
+  // --- 11. KANBAN & VIEW LOGIC ---
+  // (View switching removed)
+
+  // Render Kanban
+  const colTodo = document.getElementById('list-todo');
+  const colDoing = document.getElementById('list-doing');
+  const colDone = document.getElementById('list-done');
+
+  function renderKanban(todos, session) {
+    if (!colTodo || !colDoing || !colDone) return;
+
+    // Clear lists
+    colTodo.innerHTML = '';
+    colDoing.innerHTML = '';
+    colDone.innerHTML = '';
+
+    // Counters
+    let cTodo = 0, cDoing = 0, cDone = 0;
+
+    todos.forEach(todo => {
+      // Determine status safely
+      let status = todo.status;
+      const isActive = session && session.isActive && session.taskId === todo.id;
+
+      if (!status) {
+        // Fallback logic
+        if (todo.completed) status = 'done';
+        else if (isActive) status = 'doing';
+        else status = 'todo';
+      }
+
+      const card = createKanbanCard(todo, isActive, session);
+
+      if (status === 'done') {
+        colDone.appendChild(card);
+        cDone++;
+      } else if (status === 'doing') {
+        colDoing.appendChild(card);
+        cDoing++;
+      } else {
+        colTodo.appendChild(card);
+        cTodo++;
+      }
+    });
+
+    // Update Counts
+    const cTodoEl = document.getElementById('count-todo');
+    const cDoingEl = document.getElementById('count-doing');
+    const cDoneEl = document.getElementById('count-done');
+
+    if (cTodoEl) cTodoEl.innerText = cTodo;
+    if (cDoingEl) cDoingEl.innerText = cDoing;
+    if (cDoneEl) cDoneEl.innerText = cDone;
+  }
+
+  function createKanbanCard(todo, isActive, session) {
+    const el = document.createElement('div');
+    el.className = `kanban-card ${todo.completed ? 'completed' : ''} ${isActive ? 'active-focus-task' : ''}`;
+    el.draggable = true;
+    el.dataset.id = todo.id;
+
+    // Calculate time
+    let currentElapsed = todo.elapsed || 0;
+    if (isActive && session) {
+      const sessionElapsed = Math.floor((Date.now() - session.startTime) / 1000);
+      currentElapsed += sessionElapsed;
+    }
+    const targetSec = todo.target || (25 * 60);
+    const timeStr = `${Math.floor(currentElapsed / 60)}m / ${Math.floor(targetSec / 60)}m`;
+
+    const playBtnHtml = isActive
+      ? `<button class="kanban-play-btn pause" title="Pause Focus"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg></button>`
+      : `<button class="kanban-play-btn play" title="Start Focus"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></button>`;
+
+    el.innerHTML = `
+      <div class="kanban-card-main">
+          <div class="kanban-card-title">${todo.text}</div>
+          <div class="card-delete-wrapper">
+             <button class="card-delete-btn" title="Delete">×</button>
+          </div>
+      </div>
+      <div class="kanban-card-footer">
+        <div class="kanban-card-duration">⏱ ${timeStr}</div>
+        ${!todo.completed ? playBtnHtml : ''}
+      </div>
+    `;
+
+    // Drag Events
+    el.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', todo.id);
+      e.dataTransfer.effectAllowed = 'move';
+      el.classList.add('dragging');
+    });
+
+    el.addEventListener('dragend', () => {
+      el.classList.remove('dragging');
+      document.querySelectorAll('.kanban-column').forEach(c => c.classList.remove('drag-over'));
+    });
+
+    // Delete
+    const delBtn = el.querySelector('.card-delete-btn');
+    if (delBtn) {
+      delBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm('Delete task?')) {
+          deleteTodo(todo.id);
+        }
+      });
+    }
+
+    // Play/Pause Action
+    const playBtn = el.querySelector('.kanban-play-btn');
+    if (playBtn) {
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (isActive) {
+          // Stop
+          chrome.runtime.sendMessage({ type: 'STOP_FOCUS' });
+        } else {
+          // Start
+          chrome.runtime.sendMessage({
+            type: 'START_FOCUS',
+            task: todo.text,
+            taskId: todo.id,
+            duration: todo.target ? (todo.target - (todo.elapsed || 0)) / 60 : 25
+          });
+        }
+      });
+    }
+
+    // Double click shortcut
+    el.addEventListener('dblclick', () => {
+      if (!todo.completed && !isActive) {
+        chrome.runtime.sendMessage({
+          type: 'START_FOCUS',
+          task: todo.text,
+          taskId: todo.id,
+          duration: todo.target ? (todo.target - (todo.elapsed || 0)) / 60 : 25
+        });
+      }
+    });
+
+    return el;
+  }
+
+  // Add Task Button in Kanban
+  const kanbanAddBtn = document.getElementById('kanban-add-todo');
+  if (kanbanAddBtn) {
+    // Avoid multiple listeners if possible, but this runs once on load
+    kanbanAddBtn.onclick = () => {
+      const text = prompt("Enter task name:");
+      if (text && text.trim()) {
+        addTodoFromText(text.trim());
+      }
+    };
+  }
+
+  function addTodoFromText(text) {
+    chrome.storage.local.get('todos', (result) => {
+      const todos = result.todos || [];
+      todos.push({
+        id: Date.now(),
+        text,
+        target: 25 * 60,
+        elapsed: 0,
+        completed: false,
+        status: 'todo'
+      });
+      saveTodos(todos);
+    });
+  }
+
+  function deleteTodo(id) {
+    chrome.storage.local.get('todos', (result) => {
+      const todos = result.todos || [];
+      const newTodos = todos.filter(t => t.id != id); // loose comparison for string/int safety
+      saveTodos(newTodos);
+    });
+  }
+
+
+  // Drag & Drop Columns
+  const columns = document.querySelectorAll('.kanban-column');
+  columns.forEach(col => {
+    col.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      col.classList.add('drag-over');
+    });
+
+    col.addEventListener('dragleave', () => {
+      col.classList.remove('drag-over');
+    });
+
+    col.addEventListener('drop', (e) => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('text/plain');
+      const newStatus = col.dataset.status;
+
+      if (id && newStatus) {
+        updateTodoStatus(parseInt(id), newStatus);
+      }
+    });
+  });
+
+  function updateTodoStatus(id, newStatus) {
+    chrome.storage.local.get('todos', (result) => {
+      const todos = result.todos || [];
+      const updated = todos.map(t => {
+        if (t.id == id) { // loose match
+          t.status = newStatus;
+          // Sync completion state
+          if (newStatus === 'done') t.completed = true;
+          else t.completed = false;
+        }
+        return t;
+      });
+      saveTodos(updated);
+    });
+  }
 
 });
