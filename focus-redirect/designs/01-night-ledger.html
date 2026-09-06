@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Night Ledger — Daily Focus OS</title>
+    <style>
+      :root {
+        --bg: #0a0a0c;
+        --panel: #111115;
+        --line: #29282e;
+        --text: #f5efe5;
+        --muted: #85818a;
+        --coral: #ff785b;
+        --cream: #dfd3c1;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(
+            circle at 78% -10%,
+            #311918 0,
+            transparent 30rem
+          ),
+          var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+      .shell {
+        max-width: 1380px;
+        margin: auto;
+        padding: 32px;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 25px;
+        border-bottom: 1px solid var(--line);
+      }
+      .brand {
+        font: 600 1.6rem Georgia, serif;
+      }
+      .brand i {
+        color: var(--coral);
+        font-style: normal;
+      }
+      .top nav {
+        display: flex;
+        gap: 26px;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .top nav b {
+        color: var(--text);
+      }
+      .date {
+        color: var(--muted);
+        font: 700 0.72rem ui-monospace, monospace;
+        text-transform: uppercase;
+      }
+      .hero {
+        padding: 44px 0 28px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: end;
+      }
+      .hero h1 {
+        margin: 0;
+        font: 500 clamp(3rem, 6vw, 6.4rem) / 0.87 Georgia, serif;
+        letter-spacing: -0.065em;
+      }
+      .hero h1 span {
+        color: var(--coral);
+      }
+      .hero-side {
+        justify-self: end;
+        max-width: 360px;
+      }
+      .clock {
+        font: 500 2.5rem Georgia, serif;
+      }
+      .hero-side p {
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.65fr);
+        gap: 20px;
+      }
+      .ledger,
+      .aside-card {
+        border: 1px solid var(--line);
+        background: rgba(17, 17, 21, 0.84);
+      }
+      .ledger {
+        padding: 26px;
+      }
+      .head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+      .kicker {
+        color: var(--coral);
+        font: 800 0.66rem ui-monospace, monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .head h2 {
+        margin: 5px 0 0;
+        font: 500 2rem Georgia, serif;
+      }
+      .switch {
+        padding: 5px;
+        border: 1px solid var(--line);
+        border-radius: 99px;
+      }
+      .switch button {
+        padding: 8px 15px;
+        border: 0;
+        border-radius: 99px;
+        color: var(--muted);
+        background: none;
+      }
+      .switch .on {
+        color: #111;
+        background: var(--cream);
+      }
+      .composer {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        padding: 7px;
+        border: 1px solid var(--line);
+        background: #0b0b0e;
+      }
+      .composer input {
+        min-width: 0;
+        padding: 12px;
+        border: 0;
+        outline: 0;
+        color: var(--text);
+        background: transparent;
+        font: 1rem Georgia, serif;
+      }
+      .composer button {
+        width: 44px;
+        border: 0;
+        color: #111;
+        background: var(--coral);
+        font-size: 1.3rem;
+      }
+      .timeline {
+        margin-top: 24px;
+      }
+      .row,
+      .demo-added-task {
+        position: relative;
+        display: grid;
+        grid-template-columns: 86px 22px minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: center;
+        min-height: 82px;
+        border-top: 1px solid var(--line);
+      }
+      .row time,
+      .demo-added-task small {
+        color: var(--muted);
+        font: 700 0.7rem ui-monospace, monospace;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--coral);
+        box-shadow: 0 0 0 5px #251614;
+      }
+      .row h3 {
+        margin: 0;
+        font: 500 1.15rem Georgia, serif;
+      }
+      .row p {
+        margin: 4px 0 0;
+        color: var(--muted);
+        font-size: 0.76rem;
+      }
+      .tag {
+        padding: 5px 8px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.65rem;
+      }
+      .demo-added-task button {
+        width: 22px;
+        height: 22px;
+        grid-column: 2;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--coral);
+        background: none;
+      }
+      .demo-added-task span {
+        grid-column: 3;
+      }
+      .demo-added-task small {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .demo-added-task.done {
+        opacity: 0.4;
+        text-decoration: line-through;
+      }
+      .rail {
+        display: grid;
+        gap: 20px;
+      }
+      .aside-card {
+        padding: 22px;
+      }
+      .aside-card h3 {
+        margin: 5px 0 18px;
+        font: 500 1.4rem Georgia, serif;
+      }
+      .stat {
+        font: 500 3.4rem Georgia, serif;
+      }
+      .progress {
+        height: 3px;
+        background: #27262c;
+      }
+      .progress i {
+        display: block;
+        width: 38%;
+        height: 100%;
+        background: var(--coral);
+      }
+      .note {
+        min-height: 150px;
+        padding: 16px;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        font-family: Georgia, serif;
+      }
+      .family-strip {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 74px;
+        gap: 6px;
+      }
+      .family-strip img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        filter: saturate(0.72) contrast(1.04);
+      }
+      .family-strip img:first-child {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .playlist {
+        margin-top: 14px;
+        display: grid;
+        gap: 6px;
+      }
+      .track {
+        min-height: 42px;
+        padding: 0 11px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: #0b0b0e;
+        text-align: left;
+      }
+      .track::after {
+        content: "PLAY";
+        color: var(--coral);
+        font: 700 0.58rem ui-monospace, monospace;
+      }
+      .track:hover,
+      .track.active {
+        color: var(--text);
+        border-color: var(--coral);
+      }
+      .track.active::after {
+        content: "PLAYING";
+      }
+      .back {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        padding: 10px 13px;
+        color: var(--text);
+        border: 1px solid var(--line);
+        background: #16161a;
+        text-decoration: none;
+        font-size: 0.75rem;
+      }
+      @media (max-width: 800px) {
+        .shell {
+          padding: 20px;
+        }
+        .top nav {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+        .hero-side {
+          justify-self: start;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .row {
+          grid-template-columns: 65px 12px 1fr;
+        }
+        .tag {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="top">
+        <div class="brand">Daily Focus <i>OS</i></div>
+        <nav>
+          <b>Ledger</b><span>Tasks</span><span>Notes</span><span>Review</span>
+        </nav>
+        <div class="date" data-live-date></div>
+      </header>
+      <section class="hero">
+        <h1>The day,<br /><span>in order.</span></h1>
+        <div class="hero-side">
+          <div class="clock" data-live-clock></div>
+          <p>
+            Give every important thing a place. Then protect the next hour—not
+            the entire future.
+          </p>
+        </div>
+      </section>
+      <div class="layout">
+        <section class="ledger">
+          <div class="head">
+            <div>
+              <span class="kicker">Today’s ledger</span>
+              <h2>September 5</h2>
+            </div>
+            <div class="switch">
+              <button class="on">Today</button><button>Tomorrow</button>
+            </div>
+          </div>
+          <div class="composer" data-composer data-target="#ledger-list">
+            <input placeholder="Add the next meaningful block…" /><button
+              aria-label="Add task"
+            >
+              +
+            </button>
+          </div>
+          <div class="timeline" id="ledger-list">
+            <article class="row">
+              <time>07:00</time><i class="dot"></i>
+              <div>
+                <h3>Read and annotate</h3>
+                <p>Chapter 4 · 45 minutes</p>
+              </div>
+              <span class="tag">DEEP</span>
+            </article>
+            <article class="row">
+              <time>08:15</time><i class="dot"></i>
+              <div>
+                <h3>Build lecture narrative</h3>
+                <p>One clear through-line · 90 minutes</p>
+              </div>
+              <span class="tag">CREATE</span>
+            </article>
+            <article class="row">
+              <time>13:15</time><i class="dot"></i>
+              <div>
+                <h3>Dhuhr reset</h3>
+                <p>Prayer · walk · return</p>
+              </div>
+              <span class="tag">PRAYER</span>
+            </article>
+            <article class="row">
+              <time>15:00</time><i class="dot"></i>
+              <div>
+                <h3>Student feedback</h3>
+                <p>Close the open loops · 45 minutes</p>
+              </div>
+              <span class="tag">ADMIN</span>
+            </article>
+          </div>
+        </section>
+        <aside class="rail">
+          <section class="aside-card">
+            <span class="kicker">Protected today</span>
+            <div class="stat">2h 15m</div>
+            <div class="progress"><i></i></div>
+          </section>
+          <section class="aside-card">
+            <span class="kicker">One sentence</span>
+            <h3>What would make today enough?</h3>
+            <div class="note">
+              Finish the story before polishing the slides.
+            </div>
+          </section>
+          <section class="aside-card">
+            <span class="kicker">The reason</span>
+            <h3>Keep the people you love in view.</h3>
+            <div class="family-strip">
+              <img src="../inspiration/1.png" alt="Idris at the beach" />
+              <img src="../inspiration/2.png" alt="Idris with his mother" />
+              <img src="../inspiration/3.png" alt="Idris smiling" />
+              <img src="../inspiration/idris1.png" alt="Idris standing at the beach" />
+              <img src="../inspiration/idris2.png" alt="Father and son at the beach" />
+              <img src="../inspiration/idris.gif" alt="Idris laughing" />
+            </div>
+          </section>
+          <section class="aside-card">
+            <span class="kicker">Soundtrack</span>
+            <h3>A room for concentration.</h3>
+            <div class="playlist" data-playlist>
+              <button class="track" data-track="../music/lofi1.mp3">LoFi 1</button>
+              <button class="track" data-track="../music/lofi2.mp3">LoFi 2</button>
+              <button class="track" data-track="../music/zikr.mp3">Zikr</button>
+              <button class="track" data-track="../music/lofiquran.mp3">LoFi Quran</button>
+            </div>
+            <audio data-playlist-audio preload="none"></audio>
+          </section>
+        </aside>
+      </div>
+    </main>
+    <a class="back" href="index.html">← All concepts</a>
+    <script src="demo.js"></script>
+  </body>
+</html>

@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap');
 
 #antigravity-focus-timer {
     position: fixed;
     bottom: 24px;
     right: 24px;
     width: 320px;
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
+    background: rgba(23, 33, 39, 0.96);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(237, 244, 232, 0.12);
+    border-radius: 16px;
     padding: 16px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
     z-index: 2147483647;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    color: white;
+    box-shadow: 0 18px 46px rgba(5, 12, 15, 0.42);
+    color: #eef5e9;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -55,7 +55,7 @@
 
 .ag-task-text {
     font-size: 0.85rem;
-    color: #94a3b8;
+    color: #9aa9a8;
     margin-bottom: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -68,7 +68,7 @@
     letter-spacing: -0.02em;
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    color: white;
+    color: #eef5e9;
 }
 
 .ag-timer-actions {
@@ -80,7 +80,7 @@
 .ag-btn {
     width: 36px;
     height: 36px;
-    border-radius: 10px;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
     display: flex;
@@ -92,43 +92,43 @@
 }
 
 .ag-btn-music {
-    background: rgba(255, 255, 255, 0.05);
-    color: #cbd5e1;
+    background: rgba(82, 192, 128, 0.12);
+    color: #9be2ac;
 }
 
 .ag-btn-music:hover,
 .ag-btn-music.active {
-    background: rgba(59, 130, 246, 0.2);
-    color: #60a5fa;
+    background: rgba(92, 136, 222, 0.18);
+    color: #a9c4ff;
 }
 
 .ag-btn-done {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
+    background: rgba(82, 192, 128, 0.14);
+    color: #9be2ac;
 }
 
 .ag-btn-done:hover {
-    background: rgba(16, 185, 129, 0.25);
+    background: rgba(82, 192, 128, 0.22);
     transform: scale(1.05);
 }
 
 .ag-btn-stop {
-    background: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
+    background: rgba(230, 110, 92, 0.14);
+    color: #ffad9d;
 }
 
 .ag-btn-stop:hover {
-    background: rgba(239, 68, 68, 0.25);
+    background: rgba(230, 110, 92, 0.22);
     transform: scale(1.05);
 }
 
 .ag-music-dropdown {
     display: none;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+    background: rgba(16, 25, 30, 0.98);
+    border-radius: 10px;
     overflow: hidden;
     margin-top: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(237, 244, 232, 0.1);
 }
 
 .ag-music-dropdown.visible {
@@ -151,12 +151,12 @@
 .ag-track-item {
     padding: 10px 14px;
     font-size: 0.85rem;
-    color: #cbd5e1;
+    color: #b6c4c1;
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .ag-track-item:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
+    background: rgba(82, 192, 128, 0.12);
+    color: #9be2ac;
 }

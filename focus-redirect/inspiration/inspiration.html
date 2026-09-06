@@ -1,264 +1,455 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus OS</title>
+  <title>Focus Redirect</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&amp;family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="inspiration.css">
 </head>
-
 <body>
-
-  <div class="app-container">
-
-    <!-- SIDEBAR NAV (Visual only for now) -->
-    <nav class="sidebar">
-      <div class="brand-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #3b82f6;">
-          <circle cx="12" cy="12" r="10"></circle>
-          <circle cx="12" cy="12" r="3"></circle>
-        </svg>
-      </div>
-      <div class="nav-items">
-        <div class="nav-item active" title="Dashboard">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
-          </svg>
-        </div>
-        <div class="nav-item" title="Music">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-          </svg>
-        </div>
-        <div class="nav-item" title="Settings">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path
-              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.82.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-            </path>
-          </svg>
-        </div>
-      </div>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <main class="app-shell" id="main-content">
+    <nav class="side-nav" aria-label="Workspace navigation">
+      <button type="button" class="side-nav-item is-active" data-target="overview-section" aria-label="Overview">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </span>
+        <span class="side-nav-label">Overview</span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="timeline-section" aria-label="Timeline">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>
+        </span>
+        <span class="side-nav-label">Timeline</span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="todo-list-section" aria-label="Todo list">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </span>
+        <span class="side-nav-label">Todos</span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="habits-section" aria-label="Habit tracker">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/><path d="M16 4h4v4"/><path d="M20 4 10 14"/></svg>
+        </span>
+        <span class="side-nav-label">Habits</span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="quick-links-section" aria-label="Quick links">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11 4.93"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L13 19.07"/></svg>
+        </span>
+        <span class="side-nav-label">Links</span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="sticky-section" aria-label="Sticky notes">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z"/><path d="M15 3v5h5"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
+        </span>
+        <span class="side-nav-label">Stickies</span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="journal-section" aria-label="Journal">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        </span>
+        <span class="side-nav-label">Journal</span>
+      </button>
+      <button type="button" class="side-nav-item" data-target="metrics-section" aria-label="Momentum">
+        <span class="side-nav-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+        </span>
+        <span class="side-nav-label">Momentum</span>
+      </button>
     </nav>
 
-    <!-- CONTENT GRID -->
-    <main class="dashboard-grid">
-
-      <!-- 1. HEADER section -->
-      <header class="top-header">
-        <div class="user-welcome">
-          <h1>Rahman Rom Personal Planner</h1>
-          <p>Let's make today count.</p>
-        </div>
-        <div class="header-controls">
-          <!-- Music Player Widget -->
-          <div class="music-widget-wrapper" style="position: relative;">
-            <div class="music-widget-pill" id="music-pill">
-              <span class="music-icon-anim">
-                <span></span><span></span><span></span>
-              </span>
-              <span class="current-track-name" id="track-name">Focus Track</span>
-              <button class="icon-btn" id="header-next-btn">↠</button>
-            </div>
-
-            <!-- Header dropdown -->
-            <div id="header-music-dropdown" class="header-music-dropdown">
-              <div class="header-track-item" data-index="0">🎵 lofi1.mp3</div>
-              <div class="header-track-item" data-index="1">🎵 lofi2.mp3</div>
-              <div class="header-track-item" data-index="2">🎵 zikr.mp3</div>
-              <div class="header-track-item" data-index="3">🎵 LoFi Quran.mp3</div>
-            </div>
-          </div>
-
-          <div class="date-badge" id="date-display">
-            Today
-          </div>
-        </div>
-      </header>
-
-      <!-- 2. HERO / MOTIVATION (Rotating) -->
-      <div class="bento-card hero-card" id="hero-bg">
-        <div class="hero-content">
-          <div class="chip">Motivation</div>
-          <h2 id="main-quote">"Focus is about saying no."</h2>
-          <div class="hero-footer">
-            <span id="main-author">— STEVE JOBS</span>
-            <div class="image-indicator">
-              <!-- Dots for image count if needed -->
-            </div>
-          </div>
+    <div class="main-surface">
+    <header class="topbar" id="overview-section">
+      <div class="topbar-copy">
+        <div class="eyebrow">Focus Redirect</div>
+        <div class="topbar-title-row">
+          <h1>Daily Focus OS</h1>
+          <p>Plan less. Finish what matters.</p>
         </div>
       </div>
 
-      <!-- 3. STATS: Distractions -->
-      <div class="bento-card stat-card distraction-stat">
-        <div class="stat-icon">🛡️</div>
-        <div class="stat-value" id="distraction-count">0</div>
-        <div class="stat-label">Distractions Blocked</div>
-      </div>
-
-      <!-- 4. STATS: Focus Minutes -->
-      <div class="bento-card stat-card focus-stat">
-        <div class="stat-icon">⏱️</div>
-        <div class="stat-value" id="focus-minutes">0</div>
-        <div class="stat-label">Minutes Focused</div>
-
-        <!-- Progress Bar -->
-        <div class="focus-goal-wrapper">
-          <div class="focus-progress-track">
-            <div class="focus-progress-fill" id="focus-progress-bar" style="width: 0%"></div>
+      <div class="topbar-actions">
+        <div class="music-widget-wrapper">
+          <button type="button" class="music-pill" id="music-pill">
+            <span class="music-eq" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span id="track-name">Choose soundtrack</span>
+            <span class="pill-arrow">Open</span>
+          </button>
+          <div id="header-music-dropdown" class="music-dd">
+            <div class="header-track-item" data-index="0">LoFi 1</div>
+            <div class="header-track-item" data-index="1">LoFi 2</div>
+            <div class="header-track-item" data-index="2">Zikr</div>
+            <div class="header-track-item" data-index="3">LoFi Quran</div>
           </div>
-          <div class="focus-goal-text"><span id="focus-goal-percent">0</span>% of 240m Goal</div>
         </div>
+        <div class="date-chip mono" id="date-display"></div>
       </div>
+    </header>
 
-      <!-- 5. KANBAN BOARD (Replaces To-Do List) -->
-      <div class="bento-card kanban-card-wrapper">
-        <div class="card-header">
-          <h3>Tasks</h3>
+    <section class="workspace">
+      <section class="focus-stage panel">
+        <div class="compact-intro">
+          <div class="compact-intro-copy">
+            <div class="eyebrow">Execution Surface</div>
+            <h2>One timeline for the whole day.</h2>
+          </div>
         </div>
 
-        <!-- Creation Area (Copied from previous todo-card) -->
-        <div class="todo-creation-area">
-          <div class="todo-input-wrapper">
-            <input type="text" id="todo-input" placeholder="I want to focus on..." autocomplete="off">
-            <div class="duration-picker">
-              <span id="current-duration">25m</span>
-              <div class="duration-options">
-                <button data-min="10">10m</button>
-                <button data-min="25" class="active">25m</button>
-                <button data-min="45">45m</button>
-                <button data-min="60">60m</button>
+        <section class="panel quick-links-panel" id="quick-links-section">
+          <div class="quick-links-head">
+            <div>
+              <div class="eyebrow">Shortcuts</div>
+              <h3>Quick links</h3>
+            </div>
+            <span class="quick-links-note">Up to 5 links</span>
+          </div>
+          <div class="quick-links-toolbar">
+            <button type="button" class="quick-links-open" id="open-quick-links">Add link</button>
+          </div>
+          <div class="quick-links-list" id="quick-links-list"></div>
+        </section>
+
+        <div class="focus-strip">
+          <div class="focus-stat">
+            <span class="focus-stat-label">Now</span>
+            <span class="focus-stat-value mono" id="live-clock">00:00</span>
+            <span class="focus-stat-meta" id="live-date">Today</span>
+          </div>
+          <div class="focus-stat">
+            <span class="focus-stat-label">Focus today</span>
+            <span class="focus-stat-value"><span id="focus-minutes">0</span>m</span>
+            <span class="focus-stat-meta" id="focus-goal-inline">0% of goal</span>
+          </div>
+          <div class="focus-stat focus-stat-prayer">
+            <span class="focus-stat-label">Next prayer</span>
+            <span class="focus-stat-value mono" id="prayer-countdown">--</span>
+            <div class="progress-track">
+              <div class="progress-fill" id="prayer-progress-bar" style="width:0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-shell" id="timeline-section">
+          <div class="timeline-shell-head">
+            <div>
+              <div class="eyebrow">Planner</div>
+              <h3>Daily timeline</h3>
+              <p id="timeline-subtitle">Everything important for today should appear in order here.</p>
+            </div>
+
+            <div class="status-stack">
+              <div class="status-chip" id="timeline-day-label">Daily flow</div>
+              <div class="status-chip status-chip-soft" id="next-prayer-name">Next prayer</div>
+            </div>
+          </div>
+
+          <div class="timeline-controls">
+            <div class="timeline-day-switch" id="timeline-day-switch">
+              <button type="button" class="timeline-day-btn is-active" data-day="today">Today</button>
+              <button type="button" class="timeline-day-btn" data-day="tomorrow">Tomorrow</button>
+            </div>
+
+            <div class="planner-row">
+              <label class="field planner-task-field" for="todo-input">
+                <span class="field-label">Activity</span>
+                <input type="text" id="todo-input" class="task-input" placeholder="7:00 Read 25m" autocomplete="off">
+              </label>
+              <label class="field" for="todo-time">
+                <span class="field-label">Time</span>
+                <input type="time" id="todo-time" class="time-input">
+              </label>
+              <div class="field">
+                <span class="field-label">Duration</span>
+              <div class="duration-picker" id="duration-picker-wrap" role="button" tabindex="0" aria-label="Choose focus duration">
+                <span id="current-duration">25m</span>
+                <div class="duration-options">
+                  <button type="button" data-min="10">10m</button>
+                  <button type="button" data-min="25" class="active">25m</button>
+                  <button type="button" data-min="45">45m</button>
+                  <button type="button" data-min="60">60m</button>
+                </div>
               </div>
+              </div>
+              <button type="button" id="add-todo-btn" class="add-task-btn" aria-label="Add task">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
             </div>
-            <button id="add-todo-btn" class="add-confirm-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
+
+            <div class="planner-meta-row">
+              <div class="planner-time-presets" id="planner-time-presets">
+                <button type="button" class="planner-chip" data-time="07:00">7:00</button>
+                <button type="button" class="planner-chip" data-time="08:00">8:00</button>
+                <button type="button" class="planner-chip" data-time="09:00">9:00</button>
+                <button type="button" class="planner-chip" data-time="13:00">1:00</button>
+                <button type="button" class="planner-chip" data-time="20:00">8:00</button>
+              </div>
+              <label class="field" for="todo-note">
+                <span class="field-label">Detail</span>
+                <input type="text" id="todo-note" class="planner-note-input" placeholder="Optional detail or note">
+              </label>
+            </div>
+          </div>
+
+          <div class="timeline-list" id="today-rhythm-list"></div>
+        </div>
+
+        <section class="panel todo-list-panel" id="todo-list-section">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Todo List</div>
+              <h2>Tasks without the clock</h2>
+              <p>Capture simple tasks here, then schedule the important ones into the timeline when they need a time block.</p>
+            </div>
+            <div class="status-chip" id="todo-list-count">0 open</div>
+          </div>
+
+          <div class="todo-list-composer">
+            <label class="field" for="todo-list-input">
+              <span class="field-label">Task</span>
+              <input type="text" id="todo-list-input" class="task-input" placeholder="Add a simple task">
+            </label>
+            <button type="button" id="add-todo-list-btn" class="add-task-btn" aria-label="Add todo">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
           </div>
-        </div>
 
-        <!-- Kanban Columns -->
-        <div class="kanban-board-container">
-          <!-- Column 1: To Do -->
-          <div class="kanban-column" id="col-todo" data-status="todo">
-            <div class="column-header">
-              <span class="col-title">To Do</span>
-              <span class="col-count" id="count-todo">0</span>
-            </div>
-            <div class="column-content" id="list-todo">
-              <!-- Items -->
+          <div class="todo-quadrant-board" id="todo-quadrant-board"></div>
+        </section>
+
+        <section class="panel sticky-panel sticky-panel-main" id="sticky-section">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Quick Notes</div>
+              <h2>Sticky notes</h2>
+              <p>Keep loose thoughts, reminders, and small follow-ups close to the timeline.</p>
             </div>
           </div>
 
-          <!-- Column 2: Doing -->
-          <div class="kanban-column" id="col-doing" data-status="doing">
-            <div class="column-header">
-              <span class="col-title" style="color:#60a5fa;">Doing</span>
-              <span class="col-count" id="count-doing">0</span>
+          <div class="sticky-grid">
+            <article class="sticky-card sticky-card-sun">
+              <span class="sticky-card-label">Reminder</span>
+              <textarea id="sticky-note-2" class="sticky-input" placeholder="Something not to forget..."></textarea>
+            </article>
+            <article class="sticky-card sticky-card-sky">
+              <span class="sticky-card-label">Idea</span>
+              <textarea id="sticky-note-3" class="sticky-input" placeholder="A thought worth keeping..."></textarea>
+            </article>
+            <article class="sticky-card sticky-card-mint">
+              <span class="sticky-card-label">Later</span>
+              <textarea id="sticky-note-4" class="sticky-input" placeholder="A follow-up for later..."></textarea>
+            </article>
+            <article class="sticky-card sticky-card-lilac">
+              <span class="sticky-card-label">Dump</span>
+              <textarea id="sticky-note-5" class="sticky-input" placeholder="Quick dump, snippet, or scratch text..."></textarea>
+            </article>
+          </div>
+
+          <div class="snippet-vault">
+            <div class="snippet-vault-head">
+              <div>
+                <div class="eyebrow">Snippet Vault</div>
+                <h3>Quick copy</h3>
+              </div>
+              <span class="snippet-vault-note">Stored locally in this browser profile.</span>
             </div>
-            <div class="column-content" id="list-doing">
-              <!-- Items -->
+
+            <div class="snippet-form">
+              <label class="field" for="snippet-label-input">
+                <span class="field-label">Label</span>
+                <input type="text" id="snippet-label-input" class="snippet-field" placeholder="GitHub token or SSH host">
+              </label>
+              <label class="field" for="snippet-value-input">
+                <span class="field-label">Snippet</span>
+                <textarea id="snippet-value-input" class="snippet-field snippet-field-secret" placeholder="Paste the snippet you want to reuse later"></textarea>
+              </label>
+              <button type="button" id="add-snippet-btn" class="snippet-add-btn">Save snippet</button>
+            </div>
+
+            <div class="snippet-list" id="snippet-list"></div>
+          </div>
+
+        </section>
+      </section>
+
+      <aside class="support-rail">
+        <section class="panel family-panel">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Family</div>
+              <h2>Why it matters</h2>
+            </div>
+          </div>
+          <div class="family-grid">
+            <img src="idris1.png" alt="Idris smiling">
+            <img src="idris2.png" alt="Idris portrait">
+            <img src="idris.gif" alt="Idris animated moment">
+          </div>
+        </section>
+
+        <section class="panel journal-panel" id="journal-section">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Capture</div>
+              <h2>Journal</h2>
+              <p>Keep the page open while you work so your attention has somewhere to land.</p>
             </div>
           </div>
 
-          <!-- Column 3: Done -->
-          <div class="kanban-column" id="col-done" data-status="done">
-            <div class="column-header">
-              <span class="col-title" style="color:#10b981;">Done</span>
-              <span class="col-count" id="count-done">0</span>
-            </div>
-            <div class="column-content" id="list-done">
-              <!-- Items -->
+          <div class="journal-prompts">
+            <button type="button" class="journal-prompt" data-prompt="What matters most today?">Daily intention</button>
+            <button type="button" class="journal-prompt" data-prompt="What am I avoiding right now, and what is the smallest next step?">Unblock me</button>
+            <button type="button" class="journal-prompt" data-prompt="What felt meaningful today, and what should I carry into tomorrow?">Shutdown note</button>
+          </div>
+
+          <textarea id="journal-input" class="journal-input" placeholder="Write freely. Think clearly."></textarea>
+          <div class="journal-actions">
+            <span class="journal-status" id="journal-status">Autosaved</span>
+            <div class="journal-action-buttons">
+              <button type="button" class="journal-history-open" id="open-journal-history">History</button>
+              <button type="button" class="journal-save" id="journal-save">Save</button>
             </div>
           </div>
-        </div>
+        </section>
 
-      </div>
+        <section class="panel metrics-panel" id="metrics-section">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Signals</div>
+              <h2>Momentum</h2>
+            </div>
+            <div class="status-chip" id="weekly-week-hours">0h</div>
+          </div>
 
-      <!-- 6. CHART -->
-      <div class="bento-card chart-card">
-        <h3>Weekly Focus</h3>
-        <div class="chart-container" id="weekly-chart">
-          <!-- Bars injected via JS -->
-        </div>
-      </div>
+          <div class="mini-metric">
+            <span class="mini-metric-label">Daily target</span>
+            <span class="mini-metric-meta"><span id="focus-goal-percent">0</span>% complete</span>
+            <div class="progress-track">
+              <div class="progress-fill progress-fill-cool" id="focus-progress-bar" style="width:0%"></div>
+            </div>
+          </div>
 
-      <!-- 7. PRAYER SCHEDULE -->
-      <div class="bento-card prayer-card">
-        <div class="prayer-header">
-          <h3>Next Prayer</h3>
-          <div id="next-prayer-name" class="chip">Fajr</div>
-        </div>
-        <div class="prayer-countdown" id="prayer-countdown">--h --m</div>
-        <div class="prayer-progress-track">
-          <div class="prayer-progress-fill" id="prayer-progress-bar"></div>
-        </div>
-        <div class="prayer-list" id="prayer-list">
-          <!-- Injected via JS -->
-        </div>
-      </div>
+          <div class="mini-metric">
+            <span class="mini-metric-label">Weekly trend</span>
+            <span class="mini-metric-meta">Consistency over intensity</span>
+            <div class="progress-track">
+              <div class="progress-fill progress-fill-violet" id="weekly-progress-fill" style="width:0%"></div>
+            </div>
+          </div>
 
-      <!-- 8. STICKY NOTES -->
-      <div class="sticky-notes-wrapper">
-        <!-- Note 1: Blue -->
-        <div class="sticky-note note-blue" style="transform: rotate(-2deg);">
-          <div class="note-content" contenteditable="true" id="note-1"></div>
-        </div>
-        <!-- Note 2: Pink -->
-        <div class="sticky-note note-pink" style="transform: rotate(1deg); top: 10px;">
-          <div class="note-content" contenteditable="true" id="note-2"></div>
-        </div>
-        <!-- Note 3: Green -->
-        <div class="sticky-note note-green" style="transform: rotate(-1deg);">
-          <div class="note-content" contenteditable="true" id="note-3"></div>
-        </div>
-        <!-- Note 4: Yellow -->
-        <div class="sticky-note note-yellow" style="transform: rotate(2deg); top: 5px;">
-          <div class="note-content" contenteditable="true" id="note-4"></div>
-        </div>
-      </div>
+        </section>
 
-    </main>
-  </div>
+        <section class="panel habits-panel" id="habits-section">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Habit Tracker</div>
+              <h2>Streaks</h2>
+              <p>Check today, protect the streak, and keep the week honest.</p>
+            </div>
+            <span class="habit-streak" id="habit-streak">0 day streak</span>
+          </div>
+          <div class="habit-toolbar">
+            <label class="field" for="habit-input">
+              <span class="field-label">Habit</span>
+              <input type="text" id="habit-input" class="habit-input" placeholder="Read, walk, journal">
+            </label>
+            <button type="button" id="add-habit-btn" class="habit-add-btn">Add</button>
+          </div>
+          <div class="habit-context-row">
+            <span class="habit-context-label" id="habit-context-label">Logging for Today</span>
+            <span class="habit-context-note">Click any cell to mark that day.</span>
+          </div>
+          <div class="habit-grid" id="habit-grid"></div>
+        </section>
 
-  <!-- Blocked Warning Overlay (Hidden by default) -->
+        <section class="panel chart-panel" id="graph-section">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">Review</div>
+              <h2>Focus Graph</h2>
+              <p>Protected minutes across the week.</p>
+            </div>
+          </div>
+          <div class="chart-bars" id="weekly-chart"></div>
+        </section>
+      </aside>
+    </section>
+
+    <div hidden aria-hidden="true">
+      <ul id="todo-list"></ul>
+      <div class="kanban-column" id="col-todo" data-status="todo"><div id="list-todo"></div><span id="count-todo"></span></div>
+      <div class="kanban-column" id="col-doing" data-status="doing"><div id="list-doing"></div><span id="count-doing"></span></div>
+      <div class="kanban-column" id="col-done" data-status="done"><div id="list-done"></div><span id="count-done"></span></div>
+      <div id="note-1" contenteditable="true"></div>
+      <div id="note-2" contenteditable="true"></div>
+      <div id="note-3" contenteditable="true"></div>
+      <div id="note-4" contenteditable="true"></div>
+      <div id="note-5" contenteditable="true"></div>
+    </div>
+    </div>
+  </main>
+
   <div id="blocked-overlay" class="blocked-overlay">
-    <div class="blocked-modal" style="position: relative;">
-      <button id="close-overlay-btn"
-        style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;">&times;</button>
+    <div class="blocked-modal">
+      <button id="close-overlay-btn" type="button" class="blocked-close">&times;</button>
       <div class="blocked-icon">⛔</div>
-      <h2>Access Restricted</h2>
-      <p>You are in Focus Mode.</p>
-      <div class="blocked-actions">
-        <button id="goBack" class="btn-primary">Go Back</button>
-        <button id="continueAnyway" class="btn-ghost" disabled>Continue (<span id="countdown">30</span>)</button>
+      <h2>Take a breath</h2>
+      <p>This site is blocked while Focus Mode is active.</p>
+      <div class="blocked-btns">
+        <button id="goBack" type="button" class="btn-back">Leave page</button>
+        <button id="continueAnyway" type="button" class="btn-cont" disabled>Open anyway (<span id="countdown">30</span>)</button>
       </div>
-      <div id="reason-container" style="display:none; margin-top: 15px;">
-        <input type="text" id="reason-input" placeholder="Reason..." class="reason-input">
+      <div id="reason-container" class="reason-wrap">
+        <label class="field" for="reason-input">
+          <span class="field-label">Reason</span>
+          <input type="text" id="reason-input" class="reason-input" placeholder="Why do you need this right now?">
+        </label>
       </div>
     </div>
   </div>
 
+  <div id="journal-history-modal" class="journal-history-modal">
+    <div class="journal-history-dialog">
+      <div class="journal-history-head">
+        <span class="journal-history-title">Journal history</span>
+        <button type="button" id="close-journal-history" class="journal-history-close">&times;</button>
+      </div>
+      <div class="journal-history-controls">
+        <input type="date" id="journal-history-date" class="journal-history-date">
+      </div>
+      <div class="journal-history-preview" id="journal-history-preview">No saved entry for selected date.</div>
+    </div>
+  </div>
+
+  <div id="quick-links-modal" class="journal-history-modal">
+    <div class="journal-history-dialog">
+      <div class="journal-history-head">
+        <span class="journal-history-title">Quick links</span>
+        <button type="button" id="close-quick-links" class="journal-history-close">&times;</button>
+      </div>
+      <div class="quick-links-form">
+        <label class="field" for="quick-link-label">
+          <span class="field-label">Label</span>
+          <input type="text" id="quick-link-label" class="snippet-field" placeholder="Reference docs">
+        </label>
+        <label class="field" for="quick-link-url">
+          <span class="field-label">URL</span>
+          <input type="url" id="quick-link-url" class="snippet-field" placeholder="https://example.com">
+        </label>
+        <button type="button" id="add-quick-link" class="snippet-add-btn">Save link</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-toast" id="action-toast" role="status" aria-live="polite" aria-atomic="true">
+    <span id="action-toast-text">Saved</span>
+    <button type="button" id="action-toast-undo">Undo</button>
+  </div>
+
   <script src="inspiration.js"></script>
 </body>
-
 </html>

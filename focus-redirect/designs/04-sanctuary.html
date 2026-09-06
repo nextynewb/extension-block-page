@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sanctuary — Daily Focus OS</title>
+    <style>
+      :root {
+        --night: #0b100e;
+        --panel: #111914;
+        --panel2: #162019;
+        --line: #29362d;
+        --text: #eee8db;
+        --muted: #89958b;
+        --sage: #9fbc98;
+        --gold: #d4ad68;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        font-family: Inter, system-ui, sans-serif;
+        background: radial-gradient(
+            circle at 50% -20%,
+            #243428 0,
+            transparent 35rem
+          ),
+          var(--night);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.16;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E");
+      }
+      .shell {
+        max-width: 1320px;
+        margin: auto;
+        padding: 32px;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        font: 500 1.4rem Georgia, serif;
+        letter-spacing: 0.02em;
+      }
+      .nav {
+        display: flex;
+        gap: 28px;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+      .nav b {
+        color: var(--sage);
+      }
+      .date {
+        color: var(--muted);
+        font-size: 0.74rem;
+      }
+      .welcome {
+        padding: 65px 0 44px;
+        text-align: center;
+      }
+      .welcome small {
+        color: var(--gold);
+        font-size: 0.65rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+      .welcome h1 {
+        max-width: 780px;
+        margin: 14px auto;
+        font: 400 clamp(3rem, 6vw, 5.8rem) / 0.98 Georgia, serif;
+        letter-spacing: -0.05em;
+      }
+      .welcome p {
+        max-width: 560px;
+        margin: auto;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .prayer-line {
+        margin: 28px auto 0;
+        max-width: 520px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--sage);
+        font-size: 0.72rem;
+      }
+      .prayer-line::before,
+      .prayer-line::after {
+        content: "";
+        height: 1px;
+        flex: 1;
+        background: var(--line);
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(290px, 0.65fr);
+        gap: 18px;
+      }
+      .day,
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: rgba(17, 25, 20, 0.88);
+        box-shadow: 0 25px 70px #0004;
+      }
+      .day {
+        padding: 28px;
+      }
+      .day-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .kicker {
+        color: var(--gold);
+        font-size: 0.63rem;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .day h2,
+      .card h2 {
+        margin: 7px 0 0;
+        font: 400 1.7rem Georgia, serif;
+      }
+      .clock {
+        color: var(--sage);
+        font: 400 1.8rem Georgia, serif;
+      }
+      .composer {
+        display: flex;
+        margin-bottom: 20px;
+        padding: 7px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #0c120f;
+      }
+      .composer input {
+        min-width: 0;
+        flex: 1;
+        padding: 11px;
+        border: 0;
+        outline: 0;
+        color: var(--text);
+        background: none;
+      }
+      .composer button {
+        width: 44px;
+        border: 0;
+        border-radius: 10px;
+        color: #101510;
+        background: var(--sage);
+        font-size: 1.25rem;
+      }
+      .flow {
+        position: relative;
+      }
+      .flow::before {
+        content: "";
+        position: absolute;
+        left: 88px;
+        top: 20px;
+        bottom: 20px;
+        width: 1px;
+        background: var(--line);
+      }
+      .moment,
+      .demo-added-task {
+        position: relative;
+        display: grid;
+        grid-template-columns: 68px 18px 1fr;
+        gap: 12px;
+        min-height: 82px;
+        align-items: start;
+        padding: 16px 0;
+      }
+      .moment time,
+      .demo-added-task small {
+        color: var(--muted);
+        font-size: 0.69rem;
+      }
+      .bead {
+        position: relative;
+        z-index: 1;
+        width: 9px;
+        height: 9px;
+        margin-top: 5px;
+        border: 2px solid var(--panel);
+        border-radius: 50%;
+        background: var(--sage);
+        box-shadow: 0 0 0 3px var(--line);
+      }
+      .moment.prayer .bead {
+        background: var(--gold);
+      }
+      .moment h3 {
+        margin: 0;
+        font: 400 1.05rem Georgia, serif;
+      }
+      .moment p {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+      .demo-added-task button {
+        position: relative;
+        z-index: 1;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        border: 1px solid var(--sage);
+        border-radius: 50%;
+        color: var(--sage);
+        background: var(--panel);
+      }
+      .demo-added-task span {
+        font-family: Georgia, serif;
+      }
+      .demo-added-task small {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .demo-added-task.done {
+        opacity: 0.4;
+        text-decoration: line-through;
+      }
+      .rail {
+        display: grid;
+        gap: 18px;
+      }
+      .card {
+        padding: 23px;
+      }
+      .intention {
+        min-height: 190px;
+        background: linear-gradient(145deg, #1b281e, #111914);
+      }
+      .intention blockquote {
+        margin: 22px 0 0;
+        font: 400 1.3rem/1.4 Georgia, serif;
+        color: #d9d1c2;
+      }
+      .family {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        grid-template-rows: 95px 95px;
+        gap: 7px;
+        margin-top: 18px;
+      }
+      .family img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 13px;
+        filter: saturate(0.72) contrast(0.95);
+      }
+      .family img:first-child {
+        grid-row: 1/3;
+      }
+      .habits {
+        display: grid;
+        gap: 11px;
+        margin-top: 17px;
+      }
+      .habit {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 0.78rem;
+      }
+      .dots {
+        display: flex;
+        gap: 5px;
+      }
+      .dots i {
+        width: 9px;
+        height: 9px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+      }
+      .dots i.on {
+        border-color: var(--sage);
+        background: var(--sage);
+      }
+      .back {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        padding: 10px 13px;
+        border: 1px solid var(--line);
+        color: var(--text);
+        background: var(--panel);
+        text-decoration: none;
+        font-size: 0.74rem;
+      }
+      @media (max-width: 850px) {
+        .shell {
+          padding: 20px;
+        }
+        .nav {
+          display: none;
+        }
+        .welcome {
+          padding: 45px 0 32px;
+        }
+        .layout {
+          grid-template-columns: 1fr;
+        }
+        .rail {
+          grid-template-columns: 1fr 1fr;
+        }
+        .intention {
+          grid-column: 1/-1;
+        }
+      }
+      @media (max-width: 550px) {
+        .date {
+          display: none;
+        }
+        .rail {
+          grid-template-columns: 1fr;
+        }
+        .intention {
+          grid-column: auto;
+        }
+        .day {
+          padding: 20px;
+        }
+        .flow::before {
+          left: 73px;
+        }
+        .moment,
+        .demo-added-task {
+          grid-template-columns: 54px 14px 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="top">
+        <div class="brand">Daily Focus — Sanctuary</div>
+        <nav class="nav">
+          <b>Today</b><span>Intentions</span><span>Rhythms</span
+          ><span>Journal</span>
+        </nav>
+        <span class="date" data-live-date></span>
+      </header>
+      <section class="welcome">
+        <small>Saturday · a day held with intention</small>
+        <h1>Move through today with presence.</h1>
+        <p>
+          Work has its hours. Prayer has its rhythm. Family gives the effort
+          meaning. Let the day hold all three.
+        </p>
+        <div class="prayer-line">Dhuhr in 2 hours 26 minutes</div>
+      </section>
+      <div class="layout">
+        <section class="day">
+          <div class="day-head">
+            <div>
+              <span class="kicker">The shape of today</span>
+              <h2>A gentle structure</h2>
+            </div>
+            <time class="clock" data-live-clock></time>
+          </div>
+          <div class="composer" data-composer data-target="#sanctuary-list">
+            <input placeholder="What deserves a place today?" /><button>
+              +
+            </button>
+          </div>
+          <div class="flow" id="sanctuary-list">
+            <article class="moment">
+              <time>07:00</time><i class="bead"></i>
+              <div>
+                <h3>Read in the quiet</h3>
+                <p>One chapter · tea · no phone</p>
+              </div>
+            </article>
+            <article class="moment">
+              <time>08:15</time><i class="bead"></i>
+              <div>
+                <h3>Shape the lecture story</h3>
+                <p>Protect ninety unbroken minutes</p>
+              </div>
+            </article>
+            <article class="moment prayer">
+              <time>13:15</time><i class="bead"></i>
+              <div>
+                <h3>Dhuhr</h3>
+                <p>Step away, breathe, return gently</p>
+              </div>
+            </article>
+            <article class="moment">
+              <time>15:00</time><i class="bead"></i>
+              <div>
+                <h3>Close the loops</h3>
+                <p>Student notes and tomorrow’s first step</p>
+              </div>
+            </article>
+            <article class="moment prayer">
+              <time>19:24</time><i class="bead"></i>
+              <div>
+                <h3>Home and Maghrib</h3>
+                <p>The workday is allowed to end</p>
+              </div>
+            </article>
+          </div>
+        </section>
+        <aside class="rail">
+          <section class="card intention">
+            <span class="kicker">Today’s intention</span>
+            <h2>Enough</h2>
+            <blockquote>
+              “Finish the story. Leave the polishing for another day.”
+            </blockquote>
+          </section>
+          <section class="card">
+            <span class="kicker">Why it matters</span>
+            <h2>Home</h2>
+            <div class="family">
+              <img src="../inspiration/idris1.png" /><img
+                src="../inspiration/idris2.png"
+              /><img src="../inspiration/idris.gif" />
+            </div>
+          </section>
+          <section class="card">
+            <span class="kicker">Small rhythms</span>
+            <h2>Keep returning</h2>
+            <div class="habits">
+              <div class="habit">
+                <span>Read</span
+                ><span class="dots"
+                  ><i class="on"></i><i class="on"></i><i class="on"></i><i></i
+                  ><i></i
+                ></span>
+              </div>
+              <div class="habit">
+                <span>Walk</span
+                ><span class="dots"
+                  ><i class="on"></i><i></i><i class="on"></i><i class="on"></i
+                  ><i></i
+                ></span>
+              </div>
+              <div class="habit">
+                <span>Journal</span
+                ><span class="dots"
+                  ><i class="on"></i><i class="on"></i><i></i><i></i><i></i
+                ></span>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+    <a class="back" href="index.html">← All concepts</a>
+    <script src="demo.js"></script>
+  </body>
+</html>

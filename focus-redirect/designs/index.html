@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Daily Focus OS — Design Lab</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #09090c;
+        color: #f4f0e8;
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      }
+      header {
+        max-width: 1400px;
+        margin: auto;
+        padding: 64px 28px 34px;
+      }
+      small {
+        color: #ff795d;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 12px 0 8px;
+        font: 600 clamp(2.5rem, 7vw, 5.8rem) / 0.95 Georgia, serif;
+        letter-spacing: -0.06em;
+      }
+      header p {
+        max-width: 650px;
+        color: #9996a0;
+        font-size: 1.05rem;
+        line-height: 1.7;
+      }
+      .grid {
+        max-width: 1400px;
+        margin: auto;
+        padding: 0 28px 70px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 22px;
+      }
+      .card {
+        overflow: hidden;
+        border: 1px solid #29282f;
+        border-radius: 22px;
+        background: #111116;
+      }
+      .frame {
+        height: 430px;
+        overflow: hidden;
+        background: #08080b;
+      }
+      .frame iframe {
+        width: 1440px;
+        height: 900px;
+        border: 0;
+        transform: scale(0.46);
+        transform-origin: top left;
+        pointer-events: none;
+      }
+      .meta {
+        padding: 22px;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: end;
+      }
+      .num {
+        color: #66636e;
+        font: 700 0.75rem ui-monospace, monospace;
+      }
+      .meta h2 {
+        margin: 5px 0 7px;
+        font-size: 1.3rem;
+      }
+      .meta p {
+        margin: 0;
+        max-width: 48ch;
+        color: #8f8c96;
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+      .open {
+        flex: none;
+        padding: 11px 15px;
+        border-radius: 10px;
+        color: #09090c;
+        background: #f4f0e8;
+        text-decoration: none;
+        font-weight: 800;
+      }
+      .open:hover {
+        background: #ff795d;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .frame {
+          height: 330px;
+        }
+        .frame iframe {
+          transform: scale(0.36);
+        }
+      }
+      @media (max-width: 520px) {
+        header {
+          padding-top: 40px;
+        }
+        .grid {
+          padding-inline: 14px;
+        }
+        .meta {
+          align-items: start;
+          flex-direction: column;
+        }
+        .frame {
+          height: 260px;
+        }
+        .frame iframe {
+          transform: scale(0.29);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <small>Daily Focus OS / Design Lab</small>
+      <h1>Four ways to own a day.</h1>
+      <p>
+        These are complete visual directions, not palette swaps. Open each
+        concept full-screen, try its task input, and notice which one makes you
+        want to act.
+      </p>
+    </header>
+    <main class="grid">
+      <article class="card">
+        <div class="frame">
+          <iframe
+            src="01-night-ledger.html"
+            title="Night Ledger preview"
+          ></iframe>
+        </div>
+        <div class="meta">
+          <div>
+            <span class="num">01</span>
+            <h2>Night Ledger</h2>
+            <p>
+              An editorial daybook. Time reads vertically, the next action is
+              obvious, and everything else stays quiet.
+            </p>
+          </div>
+          <a class="open" href="01-night-ledger.html">Open</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="frame">
+          <iframe src="02-orbit.html" title="Orbit preview"></iframe>
+        </div>
+        <div class="meta">
+          <div>
+            <span class="num">02</span>
+            <h2>Orbit</h2>
+            <p>
+              A spatial focus cockpit. Your active block is the center of
+              gravity and the day orbits around it.
+            </p>
+          </div>
+          <a class="open" href="02-orbit.html">Open</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="frame">
+          <iframe src="03-monolith.html" title="Monolith preview"></iframe>
+        </div>
+        <div class="meta">
+          <div>
+            <span class="num">03</span>
+            <h2>Monolith</h2>
+            <p>
+              A keyboard-first brutalist system. Dense, fast, unapologetic—and
+              built to make status unmistakable.
+            </p>
+          </div>
+          <a class="open" href="03-monolith.html">Open</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="frame">
+          <iframe src="04-sanctuary.html" title="Sanctuary preview"></iframe>
+        </div>
+        <div class="meta">
+          <div>
+            <span class="num">04</span>
+            <h2>Sanctuary</h2>
+            <p>
+              A contemplative workspace balancing work, prayer, and family
+              without turning life into a scoreboard.
+            </p>
+          </div>
+          <a class="open" href="04-sanctuary.html">Open</a>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>

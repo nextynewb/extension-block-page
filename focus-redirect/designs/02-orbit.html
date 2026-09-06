@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Orbit — Daily Focus OS</title>
+    <style>
+      :root {
+        --bg: #070914;
+        --panel: #0d1121;
+        --line: #202844;
+        --text: #eef2ff;
+        --muted: #7d87a7;
+        --cyan: #62e6dc;
+        --violet: #9684ff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        font-family: Inter, system-ui, sans-serif;
+        background: radial-gradient(
+            circle at 38% 38%,
+            #18224a 0,
+            transparent 28rem
+          ),
+          radial-gradient(circle at 84% 8%, #2c1646 0, transparent 25rem),
+          var(--bg);
+      }
+      .shell {
+        max-width: 1420px;
+        margin: auto;
+        padding: 26px;
+      }
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+      }
+      .logo i {
+        width: 16px;
+        height: 16px;
+        border: 3px solid var(--cyan);
+        border-radius: 50%;
+        box-shadow: 0 0 18px var(--cyan);
+      }
+      nav {
+        display: flex;
+        gap: 6px;
+        padding: 5px;
+        border: 1px solid var(--line);
+        border-radius: 99px;
+        background: #090c18;
+      }
+      nav button {
+        padding: 8px 15px;
+        border: 0;
+        border-radius: 99px;
+        color: var(--muted);
+        background: none;
+      }
+      nav .on {
+        color: var(--bg);
+        background: var(--cyan);
+      }
+      .date {
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+      .grid {
+        min-height: calc(100vh - 100px);
+        display: grid;
+        grid-template-columns: 1.25fr 0.75fr;
+        gap: 24px;
+        align-items: center;
+      }
+      .cockpit {
+        position: relative;
+        min-height: 690px;
+        display: grid;
+        place-items: center;
+      }
+      .orbit {
+        position: absolute;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+      }
+      .o1 {
+        width: 620px;
+        height: 620px;
+      }
+      .o2 {
+        width: 480px;
+        height: 480px;
+        border-style: dashed;
+      }
+      .o3 {
+        width: 340px;
+        height: 340px;
+      }
+      .core {
+        position: relative;
+        z-index: 2;
+        width: 270px;
+        height: 270px;
+        padding: 26px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        border: 1px solid #46568a;
+        border-radius: 50%;
+        background: radial-gradient(circle at 40% 32%, #252e5c, #0b1024 68%);
+        box-shadow: 0 0 80px rgba(98, 230, 220, 0.13);
+      }
+      .core small {
+        color: var(--cyan);
+        letter-spacing: 0.14em;
+      }
+      .core h1 {
+        margin: 0;
+        font-size: 2rem;
+      }
+      .core time {
+        font: 700 3.6rem ui-monospace, monospace;
+      }
+      .core button {
+        padding: 10px 18px;
+        border: 0;
+        border-radius: 99px;
+        color: #071014;
+        background: var(--cyan);
+        font-weight: 800;
+      }
+      .planet {
+        position: absolute;
+        z-index: 3;
+        width: 150px;
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 15px;
+        background: rgba(13, 17, 33, 0.92);
+        box-shadow: 0 16px 40px #0008;
+      }
+      .planet b {
+        display: block;
+        font-size: 0.83rem;
+      }
+      .planet span {
+        color: var(--muted);
+        font-size: 0.66rem;
+      }
+      .p1 {
+        top: 110px;
+        left: 6%;
+      }
+      .p2 {
+        right: 4%;
+        top: 210px;
+      }
+      .p3 {
+        bottom: 100px;
+        left: 12%;
+      }
+      .p4 {
+        right: 8%;
+        bottom: 72px;
+      }
+      .planet::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 15px;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--violet);
+        box-shadow: 0 0 14px var(--violet);
+      }
+      .panel {
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: rgba(11, 15, 29, 0.82);
+        backdrop-filter: blur(18px);
+      }
+      .panel h2 {
+        margin: 5px 0 6px;
+        font-size: 1.65rem;
+      }
+      .kicker {
+        color: var(--cyan);
+        font: 800 0.65rem ui-monospace, monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+      .composer {
+        margin: 20px 0 16px;
+        display: flex;
+        padding: 6px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: #070a13;
+      }
+      .composer input {
+        min-width: 0;
+        flex: 1;
+        padding: 11px;
+        border: 0;
+        outline: 0;
+        color: var(--text);
+        background: none;
+      }
+      .composer button {
+        width: 42px;
+        border: 0;
+        border-radius: 9px;
+        color: #061013;
+        background: var(--cyan);
+        font-size: 1.2rem;
+      }
+      .queue {
+        display: grid;
+        gap: 8px;
+      }
+      .task,
+      .demo-added-task {
+        padding: 13px;
+        display: grid;
+        grid-template-columns: 32px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #0b0f1d;
+      }
+      .task button,
+      .demo-added-task button {
+        width: 27px;
+        height: 27px;
+        border: 1px solid #354064;
+        border-radius: 50%;
+        color: var(--cyan);
+        background: none;
+      }
+      .task span,
+      .demo-added-task span {
+        font-size: 0.85rem;
+      }
+      .task small,
+      .demo-added-task small {
+        color: var(--muted);
+      }
+      .demo-added-task.done {
+        opacity: 0.4;
+        text-decoration: line-through;
+      }
+      .signals {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+      .signal {
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+      .signal b {
+        display: block;
+        font-size: 1.25rem;
+      }
+      .signal span {
+        color: var(--muted);
+        font-size: 0.65rem;
+      }
+      .back {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        padding: 10px 13px;
+        color: var(--text);
+        border: 1px solid var(--line);
+        background: #0d1121;
+        text-decoration: none;
+        font-size: 0.75rem;
+      }
+      @media (max-width: 900px) {
+        .date {
+          display: none;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .cockpit {
+          min-height: 620px;
+          overflow: hidden;
+        }
+        .o1 {
+          width: 540px;
+          height: 540px;
+        }
+        .o2 {
+          width: 420px;
+          height: 420px;
+        }
+        .o3 {
+          width: 310px;
+          height: 310px;
+        }
+        .planet {
+          width: 130px;
+        }
+        .p1 {
+          left: 1%;
+        }
+        .p2 {
+          right: 1%;
+        }
+      }
+      @media (max-width: 520px) {
+        .shell {
+          padding: 16px;
+        }
+        nav button {
+          padding: 7px;
+        }
+        .cockpit {
+          min-height: 540px;
+        }
+        .o1 {
+          width: 470px;
+          height: 470px;
+        }
+        .o2 {
+          width: 365px;
+          height: 365px;
+        }
+        .core {
+          width: 230px;
+          height: 230px;
+        }
+        .core time {
+          font-size: 2.7rem;
+        }
+        .planet {
+          width: 112px;
+          padding: 10px;
+        }
+        .p3 {
+          left: 1%;
+        }
+        .p4 {
+          right: 1%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="top">
+        <div class="logo"><i></i>DAILY ORBIT</div>
+        <nav>
+          <button class="on">Focus</button><button>Plan</button
+          ><button>Reflect</button>
+        </nav>
+        <div class="date" data-live-date></div>
+      </header>
+      <div class="grid">
+        <section class="cockpit">
+          <div class="orbit o1"></div>
+          <div class="orbit o2"></div>
+          <div class="orbit o3"></div>
+          <article class="planet p1">
+          <b>Read &amp; annotate</b><span>07:00 · complete</span>
+          </article>
+          <article class="planet p2">
+            <b>Lecture narrative</b><span>08:15 · 90 min</span>
+          </article>
+          <article class="planet p3">
+            <b>Dhuhr reset</b><span>13:15 · prayer</span>
+          </article>
+          <article class="planet p4">
+            <b>Student feedback</b><span>15:00 · 45 min</span>
+          </article>
+          <div class="core">
+            <small>ACTIVE ORBIT</small>
+            <h1>Build the story</h1>
+            <time>24:18</time><button>Pause focus</button>
+          </div>
+        </section>
+        <aside class="panel">
+          <span class="kicker">Mission queue</span>
+          <h2>What comes next</h2>
+          <p class="muted">
+            The center holds one commitment. Everything else waits here.
+          </p>
+          <div class="composer" data-composer data-target="#orbit-list">
+            <input placeholder="Add to orbit…" /><button>+</button>
+          </div>
+          <div class="queue" id="orbit-list">
+            <article class="task">
+              <button data-check>○</button><span>Refine three key slides</span
+              ><small>45m</small>
+            </article>
+            <article class="task">
+              <button data-check>○</button><span>Reply to Azim</span
+              ><small>10m</small>
+            </article>
+            <article class="task">
+              <button data-check>○</button><span>Prepare tomorrow</span
+              ><small>20m</small>
+            </article>
+          </div>
+          <div class="signals">
+            <div class="signal"><b>135m</b><span>FOCUS</span></div>
+            <div class="signal"><b>3</b><span>BLOCKS</span></div>
+            <div class="signal"><b>72%</b><span>ENERGY</span></div>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <a class="back" href="index.html">← All concepts</a>
+    <script src="demo.js"></script>
+  </body>
+</html>

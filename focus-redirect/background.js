@@ -62,6 +62,9 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     chrome.action.setBadgeBackgroundColor({ color: '#ef4444' }); // Red
     console.error("Audio Error reported:", msg.error);
   } else if (msg.type === 'MANUAL_PLAY_MUSIC') {
+    // Clear any previous error state
+    chrome.action.setBadgeText({ text: '' });
+
     // Ensure offscreen document exists before trying to play
     setupOffscreenDocument('offscreen/audio.html').then(() => {
       safeSendMessage({ type: 'PLAY_MUSIC' });
@@ -88,7 +91,18 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     checkTimerExpiry();
   } else if (alarm.name === 'fridayCheck') {
     checkFridayPrayer();
+  } else if (alarm.name === 'phoneDistanceReminder') {
+    maybeShowPhoneDistanceReminder();
   }
+});
+
+chrome.runtime.onInstalled.addListener(() => {
+  schedulePhoneDistanceReminder();
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  schedulePhoneDistanceReminder();
+  maybeShowPhoneDistanceReminder();
 });
 
 function checkTimerExpiry() {
@@ -254,6 +268,56 @@ loadPrayerData();
 
 // Check every minute
 chrome.alarms.create('fridayCheck', { periodInMinutes: 1 });
+
+// --- DAILY PHONE DISTANCE REMINDER ---
+function getTodayKey() {
+  return new Date().toLocaleDateString('en-CA');
+}
+
+function getNextPhoneReminderTime() {
+  const now = new Date();
+  const next = new Date(now);
+  next.setHours(8, 0, 0, 0);
+
+  if (next <= now) {
+    next.setDate(next.getDate() + 1);
+  }
+
+  return next.getTime();
+}
+
+function schedulePhoneDistanceReminder() {
+  chrome.alarms.create('phoneDistanceReminder', {
+    when: getNextPhoneReminderTime(),
+    periodInMinutes: 24 * 60
+  });
+}
+
+function isPhoneReminderWindow(date = new Date()) {
+  const hour = date.getHours();
+  return hour >= 8 && hour < 9;
+}
+
+function maybeShowPhoneDistanceReminder() {
+  if (!isPhoneReminderWindow()) return;
+
+  const todayKey = getTodayKey();
+  chrome.storage.local.get(['lastPhoneDistanceReminderDate'], (result) => {
+    if (result.lastPhoneDistanceReminderDate === todayKey) return;
+
+    chrome.notifications.create('phoneDistanceReminder', {
+      type: 'basic',
+      iconUrl: 'icons/icon128.png',
+      title: 'Put your phone away',
+      message: 'Turn off your phone and place it far away before you start work.',
+      priority: 2
+    });
+
+    chrome.storage.local.set({ lastPhoneDistanceReminderDate: todayKey });
+  });
+}
+
+schedulePhoneDistanceReminder();
 
 function checkFridayPrayer() {
   if (!prayerData) return;

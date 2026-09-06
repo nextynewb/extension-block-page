@@ -1,4 +1,39 @@
 document.addEventListener('DOMContentLoaded', () => {
+  if (!window.chrome?.storage?.local) {
+    const previewStorageKey = 'focusRedirectPopupPreviewStorage';
+    const readPreviewStorage = () => JSON.parse(localStorage.getItem(previewStorageKey) || '{}');
+    const writePreviewStorage = (data) => localStorage.setItem(previewStorageKey, JSON.stringify(data));
+
+    window.chrome = {
+      ...(window.chrome || {}),
+      storage: {
+        local: {
+          get(keys, callback) {
+            const store = readPreviewStorage();
+            if (typeof keys === 'string') {
+              callback({ [keys]: store[keys] });
+              return;
+            }
+            if (Array.isArray(keys)) {
+              callback(Object.fromEntries(keys.map((key) => [key, store[key]])));
+              return;
+            }
+            callback({ ...keys, ...store });
+          },
+          set(items) {
+            writePreviewStorage({ ...readPreviewStorage(), ...items });
+          }
+        }
+      },
+      runtime: {
+        sendMessage() {},
+        onMessage: {
+          addListener() {}
+        }
+      }
+    };
+  }
+
   const enableToggle = document.getElementById('enableToggle');
   const statusText = document.getElementById('statusText');
   const sitesList = document.getElementById('sitesList');

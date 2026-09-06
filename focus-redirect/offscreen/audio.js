@@ -35,25 +35,42 @@ function playAudio() {
     if (!audio) return;
     const trackUrl = chrome.runtime.getURL(`music/${tracks[currentIndex]}`);
 
-    console.log("Loading track:", trackUrl);
+    // If source is already set and we're just playing/resuming
+    if (audio.src === trackUrl) {
+        if (audio.paused) {
+            const playPromise = audio.play();
+            handlePlayPromise(playPromise);
+        }
+        return;
+    }
 
+    console.log("Loading track:", trackUrl);
     audio.src = trackUrl;
-    audio.load();
-    audio.currentTime = 0;
+    // Removed redundant audio.load() and immediate currentTime/volume set
+    // which can sometimes cause issues before metadata is loaded
     audio.volume = 1.0;
 
     const playPromise = audio.play();
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
+    handlePlayPromise(playPromise);
+    notifyTrackChange();
+}
+
+function handlePlayPromise(promise) {
+    if (promise !== undefined) {
+        promise.then(() => {
             chrome.runtime.sendMessage({ type: 'PLAYBACK_STATE', isPlaying: true }).catch(() => { });
         }).catch(error => {
+            if (error.name === 'AbortError') {
+                console.log("Playback interrupted (AbortError)");
+                return;
+            }
             const errMsg = `Playback failed: ${error.name} - ${error.message}`;
             console.error(errMsg);
             chrome.runtime.sendMessage({ type: 'AUDIO_ERROR', error: errMsg }).catch(() => { });
         });
     }
-    notifyTrackChange();
 }
+
 
 function stopAudio() {
     if (audio) {

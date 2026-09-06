@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Monolith — Daily Focus OS</title>
+    <style>
+      :root {
+        --black: #050505;
+        --white: #f1f0ea;
+        --acid: #d7ff45;
+        --gray: #77776f;
+        --line: #34342f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--black);
+        color: var(--white);
+        font-family: Arial, sans-serif;
+      }
+      .shell {
+        max-width: 1480px;
+        margin: auto;
+        padding: 20px;
+      }
+      .mast {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        border: 2px solid var(--white);
+      }
+      .brand {
+        padding: 17px 20px;
+        font-size: 1.45rem;
+        font-weight: 950;
+        letter-spacing: -0.05em;
+      }
+      .brand span {
+        color: var(--acid);
+      }
+      .clock {
+        min-width: 260px;
+        padding: 17px 20px;
+        border-left: 2px solid var(--white);
+        font: 800 1.1rem ui-monospace, monospace;
+        text-align: right;
+      }
+      .ticker {
+        padding: 8px 12px;
+        color: var(--black);
+        background: var(--acid);
+        font: 800 0.69rem ui-monospace, monospace;
+        letter-spacing: 0.08em;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr) 310px;
+        border: 2px solid var(--white);
+        border-top: 0;
+      }
+      .nav {
+        border-right: 2px solid var(--white);
+      }
+      .nav button {
+        width: 100%;
+        padding: 18px 15px;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--gray);
+        background: none;
+        font-weight: 800;
+        text-align: left;
+      }
+      .nav .on {
+        color: var(--black);
+        background: var(--acid);
+      }
+      .nav .num {
+        float: right;
+        font: 700 0.7rem ui-monospace, monospace;
+      }
+      .main {
+        min-width: 0;
+      }
+      .title {
+        padding: 28px;
+        border-bottom: 2px solid var(--white);
+      }
+      .title small {
+        font: 800 0.66rem ui-monospace, monospace;
+        color: var(--acid);
+      }
+      .title h1 {
+        max-width: 800px;
+        margin: 8px 0 0;
+        font-size: clamp(2.8rem, 6vw, 6rem);
+        line-height: 0.84;
+        letter-spacing: -0.075em;
+        text-transform: uppercase;
+      }
+      .composer {
+        display: grid;
+        grid-template-columns: 82px 1fr 68px;
+        border-bottom: 2px solid var(--white);
+      }
+      .composer label {
+        display: grid;
+        place-items: center;
+        color: var(--black);
+        background: var(--acid);
+        font: 900 0.7rem ui-monospace, monospace;
+      }
+      .composer input {
+        min-width: 0;
+        padding: 20px;
+        border: 0;
+        outline: 0;
+        color: var(--white);
+        background: var(--black);
+        font: 700 1.05rem ui-monospace, monospace;
+      }
+      .composer button {
+        border: 0;
+        border-left: 2px solid var(--white);
+        color: var(--black);
+        background: var(--white);
+        font-size: 1.6rem;
+      }
+      .table-head,
+      .task,
+      .demo-added-task {
+        display: grid;
+        grid-template-columns: 72px 38px minmax(0, 1fr) 90px;
+        align-items: center;
+        min-height: 64px;
+        border-bottom: 1px solid var(--line);
+      }
+      .table-head {
+        min-height: 35px;
+        color: var(--gray);
+        font: 700 0.6rem ui-monospace, monospace;
+      }
+      .table-head > *,
+      .task > *,
+      .demo-added-task > * {
+        padding: 0 12px;
+      }
+      .task time {
+        font: 800 0.72rem ui-monospace, monospace;
+      }
+      .task button,
+      .demo-added-task button {
+        width: 23px;
+        height: 23px;
+        padding: 0;
+        border: 1px solid var(--gray);
+        color: var(--acid);
+        background: none;
+      }
+      .task b,
+      .demo-added-task span {
+        font-size: 0.87rem;
+        text-transform: uppercase;
+      }
+      .task small,
+      .demo-added-task small {
+        color: var(--gray);
+        font: 700 0.66rem ui-monospace, monospace;
+      }
+      .task.hot {
+        border-left: 7px solid var(--acid);
+      }
+      .demo-added-task small {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .demo-added-task button {
+        grid-column: 2;
+      }
+      .demo-added-task span {
+        grid-column: 3;
+      }
+      .demo-added-task.done {
+        opacity: 0.35;
+        text-decoration: line-through;
+      }
+      .rail {
+        border-left: 2px solid var(--white);
+      }
+      .block {
+        padding: 20px;
+        border-bottom: 2px solid var(--white);
+      }
+      .block small {
+        color: var(--gray);
+        font: 800 0.64rem ui-monospace, monospace;
+      }
+      .block strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 3.5rem;
+        line-height: 1;
+      }
+      .block h2 {
+        margin: 9px 0;
+        font-size: 1.25rem;
+        text-transform: uppercase;
+      }
+      .meter {
+        height: 12px;
+        margin-top: 14px;
+        border: 1px solid var(--white);
+      }
+      .meter i {
+        display: block;
+        width: 56%;
+        height: 100%;
+        background: var(--acid);
+      }
+      .quote {
+        font-size: 1.6rem;
+        font-weight: 900;
+        line-height: 1.05;
+        text-transform: uppercase;
+      }
+      .keys {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-top: 14px;
+      }
+      .key {
+        padding: 8px;
+        border: 1px solid var(--line);
+        color: var(--gray);
+        font: 700 0.63rem ui-monospace, monospace;
+      }
+      .key b {
+        color: var(--white);
+      }
+      .back {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        padding: 10px 13px;
+        color: var(--black);
+        background: var(--acid);
+        text-decoration: none;
+        font-weight: 900;
+        font-size: 0.72rem;
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .nav {
+          display: flex;
+          overflow: auto;
+          border-right: 0;
+          border-bottom: 2px solid var(--white);
+        }
+        .nav button {
+          min-width: 120px;
+          border-right: 1px solid var(--line);
+        }
+        .rail {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          border-left: 0;
+          border-top: 2px solid var(--white);
+        }
+        .clock {
+          min-width: 0;
+        }
+      }
+      @media (max-width: 560px) {
+        .shell {
+          padding: 8px;
+        }
+        .mast {
+          grid-template-columns: 1fr;
+        }
+        .clock {
+          border-top: 2px solid var(--white);
+          border-left: 0;
+          text-align: left;
+        }
+        .title {
+          padding: 20px;
+        }
+        .rail {
+          grid-template-columns: 1fr;
+        }
+        .composer {
+          grid-template-columns: 60px 1fr 55px;
+        }
+        .table-head,
+        .task,
+        .demo-added-task {
+          grid-template-columns: 55px 32px 1fr;
+        }
+        .table-head > :last-child,
+        .task > :last-child {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="mast">
+        <div class="brand">DAILY FOCUS <span>OS/03</span></div>
+        <div class="clock">
+          <span data-live-clock></span> / <span data-live-date></span>
+        </div>
+      </header>
+      <div class="ticker">
+        SYSTEM READY · 03 OPEN LOOPS · NEXT PRAYER 02:26 · FOCUS MODE AVAILABLE
+        · TYPE / TO CAPTURE · CONSISTENCY &gt; INTENSITY
+      </div>
+      <div class="grid">
+        <nav class="nav">
+          <button class="on">TODAY <span class="num">01</span></button
+          ><button>TASKS <span class="num">03</span></button
+          ><button>HABITS <span class="num">07</span></button
+          ><button>NOTES <span class="num">04</span></button
+          ><button>REVIEW <span class="num">05</span></button>
+        </nav>
+        <section class="main">
+          <div class="title">
+            <small>EXECUTION QUEUE / SAT 05 SEP</small>
+            <h1>Do the work in front of you.</h1>
+          </div>
+          <div class="composer" data-composer data-target="#mono-list">
+            <label>NEW&gt;</label
+            ><input placeholder="TYPE TASK + PRESS ENTER" /><button>+</button>
+          </div>
+          <div class="table-head">
+            <span>TIME</span><span>OK</span><span>COMMITMENT</span
+            ><span>BLOCK</span>
+          </div>
+          <div id="mono-list">
+            <article class="task hot">
+              <time>08:15</time><button data-check>○</button
+              ><b>Build lecture narrative</b><small>90 MIN</small>
+            </article>
+            <article class="task">
+              <time>11:00</time><button data-check>○</button
+              ><b>Review student work</b><small>45 MIN</small>
+            </article>
+            <article class="task">
+              <time>13:15</time><button data-check>○</button><b>Dhuhr / reset</b
+              ><small>20 MIN</small>
+            </article>
+            <article class="task">
+              <time>15:00</time><button data-check>○</button
+              ><b>Close open loops</b><small>30 MIN</small>
+            </article>
+          </div>
+        </section>
+        <aside class="rail">
+          <div class="block">
+            <small>FOCUS / TODAY</small><strong>02:15</strong>
+            <div class="meter"><i></i></div>
+          </div>
+          <div class="block">
+            <small>NEXT ACTION</small>
+            <h2>Build the story</h2>
+            <button
+              style="
+                width: 100%;
+                padding: 12px;
+                border: 0;
+                background: var(--acid);
+                font-weight: 900;
+              "
+            >
+              START 45:00
+            </button>
+          </div>
+          <div class="block">
+            <small>OPERATING PRINCIPLE</small>
+            <p class="quote">Clarity comes from contact with the work.</p>
+          </div>
+          <div class="block">
+            <small>KEYBOARD</small>
+            <div class="keys">
+              <span class="key"><b>/</b> CAPTURE</span
+              ><span class="key"><b>J</b> DOWN</span
+              ><span class="key"><b>K</b> UP</span
+              ><span class="key"><b>X</b> DONE</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+    <a class="back" href="index.html">← ALL</a>
+    <script src="demo.js"></script>
+  </body>
+</html>
