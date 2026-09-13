@@ -1,2 +1,14 @@
 .DS_Store
 **/.DS_Store
+
+# added by workspace backup
+node_modules/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+.env.*
+!.env.example
+!.env.template
+*.pem
+*.key
